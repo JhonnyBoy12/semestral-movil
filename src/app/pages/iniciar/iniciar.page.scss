@@ -1,0 +1,44 @@
+ion-content {
+  padding-top: 30px;
+    --background: var(--ion-background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-recuadro {
+    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-card {
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 90%;
+  }
+  
+  .logo {
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 180px;
+    height: 180px;
+  }
+  
+  ion-button {
+    padding: 0 40px 0 40px;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    --background: var(--ion-color-primary);
+    --border-radius: 8px;
+    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .register-link {
+    margin-top: 15px;
+  }
+  
