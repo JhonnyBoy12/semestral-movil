@@ -34,7 +34,11 @@ const routes: Routes = [
   {
     path: 'info-ubicaciones',
     loadChildren: () => import('./pages/info-ubicaciones/info-ubicaciones.module').then( m => m.InfoUbicacionesPageModule)
+  },  {
+    path: 'recuperacion',
+    loadChildren: () => import('./pages/recuperacion/recuperacion.module').then( m => m.RecuperacionPageModule)
   },
+
 ];
 
 @NgModule({

@@ -1,3 +1,4 @@
+
 #container {
   text-align: center;
 
@@ -26,11 +27,11 @@
   text-decoration: none;
 }
 
-ion-toolbar{
-  background-color: var(--ion-background-color-header);
+.logo{
+  display: flex;
+  margin: 0 173px 0 auto;
+  height: 70px;
+  width: 70px;
 }
 
 
-ion-tab-bar{
-  background-color: var(--ion-background-color-header);
-}

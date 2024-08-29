@@ -4,9 +4,10 @@
 
 <ion-content [fullscreen]="true" color="header">
 
-  <div class="logo">
-    <img src="assets/icon/logo.png" alt="App Logo" class="logo" />
-  </div>
+  
+  <img src="assets/icon/logo.png" alt="App Logo" class="logo" />
+  
+
   <div class="login-recuadro">
     <ion-card class="login-card" color="light">
       
@@ -36,6 +37,11 @@
         <ion-row class="register-link">
           <ion-col class="ion-text-center">
             <ion-router-link [routerLink]="['/registrar']">¿No tienes una cuenta? Registrate</ion-router-link>
+          </ion-col>
+        </ion-row>
+        <ion-row class="recuperacion-link">
+          <ion-col class="ion-text-center">
+            <ion-router-link [routerLink]="['/recuperacion']">¿Olvidaste tu contraseña?</ion-router-link>
           </ion-col>
         </ion-row>
       </ion-card-content>

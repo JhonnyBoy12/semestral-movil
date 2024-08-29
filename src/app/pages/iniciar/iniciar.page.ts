@@ -45,7 +45,7 @@ export class IniciarPage implements OnInit {
   //ALERTA RECUADRO
   async presentAlert(message: string) {
     const alert = await this.alertController.create({
-      header: 'Error',
+      header: 'Error al iniciar sesion',
       message: message,
       buttons: ['OK']
     });

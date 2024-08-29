@@ -100,7 +100,7 @@ export class RegistrarPage implements OnInit {
     }
     
     this.presentToast('bottom');
-    this.router.navigate(['/iniciar'],context)
+    this.router.navigate(['/iniciar'],context);
 
   }
   

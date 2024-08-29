@@ -1,5 +1,4 @@
 ion-content {
-    padding-top: 30px;
       --background: var(--ion-background-color);
       display: flex;
       justify-content: center;
@@ -7,7 +6,6 @@ ion-content {
     }
     
     .login-recuadro {
-      padding-top: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -23,7 +21,7 @@ ion-content {
     
     .logo {
       display: block;
-      margin: 0 auto 20px auto;
+      margin: 30px auto 80px auto;
       width: 180px;
       height: 180px;
     }
