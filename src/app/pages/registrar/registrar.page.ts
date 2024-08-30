@@ -50,7 +50,7 @@ export class RegistrarPage implements OnInit {
   //ALERTA TOAST
   async presentToast(position: 'top' | 'middle' | 'bottom') {
     const toast = await this.toastController.create({
-      message: '¡Se ah registrado correctamente!',
+      message: '¡Se ha registrado correctamente!',
       duration: 1500,
       position: position,
     });

@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'iniciar',
     pathMatch: 'full'
   },
   {
@@ -34,10 +34,24 @@ const routes: Routes = [
   {
     path: 'info-ubicaciones',
     loadChildren: () => import('./pages/info-ubicaciones/info-ubicaciones.module').then( m => m.InfoUbicacionesPageModule)
-  },  {
+  },
+  {
     path: 'recuperacion',
     loadChildren: () => import('./pages/recuperacion/recuperacion.module').then( m => m.RecuperacionPageModule)
   },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
+  },
+
+
+ 
+
+
 
 ];
 

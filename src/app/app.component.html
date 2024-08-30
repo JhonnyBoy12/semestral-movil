@@ -8,17 +8,34 @@
       </ion-header>
       <!------>
       <ion-content>
+        
         <ion-list>
+          
+          <ion-item [routerDirection]="'root'" [routerLink]="'/perfil'">
+            <ion-icon name="paw"></ion-icon>
+            <ion-label> Ir a pagina Perfil </ion-label>
+          </ion-item>
+  
+          <!----ir al menu-->
           <ion-item [routerDirection]="'root'" [routerLink]="'/home'">
             <ion-icon name="paw"></ion-icon>
-            <ion-label>Pagina Home</ion-label>
+            <ion-label> Pagina Home</ion-label>
           </ion-item>
 
-          <ion-item [routerDirection]="'root'" [routerLink]="'/agregar'">
+        <!----ir a publicar-->
+          <ion-item [routerDirection]="'root'" [routerLink]="'/publicar'">
             <ion-icon name="paw"></ion-icon>
-            <ion-label>Ir a pagina Agregar</ion-label>
+            <ion-label> Ir a pagina Publicar</ion-label>
           </ion-item>
-        </ion-list>
+
+        <!----ir al foro-->
+        <ion-item [routerDirection]="'root'" [routerLink]="'/foro'">
+          <ion-icon name="paw"></ion-icon>
+          <ion-label> Ir a pagina Foro </ion-label>
+        </ion-item>
+        
+      </ion-list>
+
       </ion-content>
     </ion-menu>
   </ion-menu-toggle>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -31,6 +31,7 @@ export class IniciarPage implements OnInit {
         
       }
     });
+
 
 
   }
@@ -84,8 +85,22 @@ export class IniciarPage implements OnInit {
       return;
     }
 
-    this.presentToast('bottom');
-    this.router.navigate(['/home']);
-  }
+    ///variables de contexto
+    let context: NavigationExtras = {
+      state:{
+        usuarioMen:this.nombre,
+        mailMen:this.email,
+        telMen:this.telefono,
+        contMen:this.contra,
+        mailinicioMen:this.emailInicio,
+        contrainicioMen:this.contraInicio
+      }
 
+    }
+
+    this.presentToast('bottom');
+    this.router.navigate(['/home'],context);
+  }
+  
+  
 }
