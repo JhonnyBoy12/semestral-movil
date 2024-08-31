@@ -9,6 +9,9 @@ import { AlertController, ToastController } from '@ionic/angular';
 })
 export class IniciarPage implements OnInit {
 
+  adminEmail:string="admin@gmail.com";
+  adminContra:string="admin";
+
   nombre: string="";
   email:string="";
   telefono:string="";
@@ -80,10 +83,17 @@ export class IniciarPage implements OnInit {
       return;
     }
 
+    if (this.adminEmail == this.emailInicio || this.adminContra == this.contraInicio){
+      this.router.navigate(['/home-admin']);
+      this.presentToast('bottom');
+      return;
+    }
+
     if (this.email !== this.emailInicio || this.contra !== this.contraInicio) {
       this.presentAlert('Correo electrónico o contraseña incorrectos.');
       return;
     }
+
 
     ///variables de contexto
     let context: NavigationExtras = {
