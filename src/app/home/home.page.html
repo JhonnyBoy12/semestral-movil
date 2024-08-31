@@ -10,7 +10,26 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <img src="assets/icon/mapa.jpg" alt="mapa" style="height: 100%;">
-  <div id="container">
+  <div class="map">
+    <img src="assets/icon/mapa.jpg" alt="mapa" style="height: 100%;">
+  </div>
+
+  <!-- Footer curvado -->
+  <div class="menu-home">
+    <div class="menu">
+        <div class="item">
+          <ion-button fill="clear" size="large" class="boton-home" [routerLink]="'/foro'">
+            <img src="assets/icon/foroentrada.png">
+          </ion-button>
+          <p class="menu-text">Foro Adopción</p>
+        </div>
+        <div class="item">
+          <ion-button fill="clear" size="large" class="boton-home" [routerLink]="'/ubicaciones'">
+            <img src="assets/icon/ubicacionentrada.png">
+          </ion-button>
+          <p class="menu-text">Ubicaciones</p>
+        </div>
+    </div>
   </div>
 </ion-content>
+  

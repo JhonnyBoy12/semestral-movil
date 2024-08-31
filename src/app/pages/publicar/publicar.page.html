@@ -38,19 +38,41 @@
 
 
     <!-- Vista previa-->
-  <div class="vista-previa">
-    <ion-card>
+  
+  <div class="card-publicacion">
+    <div class="perfil">
+      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
+      <span class="nombre">Nombre de Usuario</span>
+    </div>
+    <ion-card class="card-conten">
       <ion-card-header>
         <ion-card-title>{{ titulo || 'Título de la publicación' }}</ion-card-title>
       </ion-card-header>
-      <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa de la imagen" />
+
+      <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa de la imagen" class="imagen"/>
+
       <ion-card-content>
-        
-        <p>{{ descripcion || 'Descripción de la publicación...' }}</p>
+        {{ descripcion || 'Descripción de la publicación...' }}
       </ion-card-content>
+
+      <ion-row class="boton-accion">
+        <ion-col>
+          <ion-button fill="clear" color="dark">
+            <ion-icon name="bookmark-outline"></ion-icon>
+            Guardar
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button fill="clear" color="dark">
+            <ion-icon name="call-outline"></ion-icon>
+            Contactar
+          </ion-button>
+        </ion-col>
+      </ion-row>
     </ion-card>
   </div>
   
-  <ion-button expand="full" color="primary" (click)="publicar()">Publicar</ion-button>
+  <ion-button expand="full" color="primary" (click)="publicar()" class="boton-publicar" 
+  style="padding: 0px 40px 20px 40px; font-weight: bold;">Publicar</ion-button>
 
   
