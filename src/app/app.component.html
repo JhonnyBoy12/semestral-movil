@@ -1,42 +1,71 @@
 <ion-app>
-  <ion-menu-toggle>
+  <ion-menu-toggle color="primary">
     <ion-menu contentId="main-content">
       <ion-header>
-        <ion-toolbar>
+        <div class="usuario">
+          <ion-icon name="person-circle-outline"></ion-icon>
+          <h1 class="usuario-text">Nombre Usuario</h1>
+        </div>
+        <ion-toolbar color="primary">
           <ion-title>Menu principal</ion-title>
         </ion-toolbar>
       </ion-header>
       <!------>
       <ion-content>
         
-        <ion-list>
-          
-          <ion-item [routerDirection]="'root'" [routerLink]="'/perfil'">
+        <ion-list lines="none">
+
+          <!----ir al foro-->
+          <ion-item color="primary"[routerDirection]="'root'" [routerLink]="'/perfil'">
             <ion-icon name="paw"></ion-icon>
             <ion-label> Ir a pagina Perfil </ion-label>
+          </ion-item> 
+
+          <!----ir al foro-->
+          <ion-item color="primary" [routerDirection]="'root'" [routerLink]="'/foro'">
+            <ion-icon name="paw"></ion-icon>
+            <ion-label> Ir al Foro de adopcion </ion-label>
           </ion-item>
   
           <!----ir al menu-->
-          <ion-item [routerDirection]="'root'" [routerLink]="'/home'">
+          <ion-item color="primary" [routerDirection]="'root'" [routerLink]="'/home'">
             <ion-icon name="paw"></ion-icon>
             <ion-label> Pagina Home</ion-label>
           </ion-item>
 
-        <!----ir a publicar-->
-          <ion-item [routerDirection]="'root'" [routerLink]="'/publicar'">
+          <!----ver ubicaciones cercanas-->
+          <ion-item color="primary" [routerDirection]="'root'" [routerLink]="'/ubicaciones'">
             <ion-icon name="paw"></ion-icon>
-            <ion-label> Ir a pagina Publicar</ion-label>
+            <ion-label> Ver ubicaciones cercanas</ion-label>
           </ion-item>
 
-        <!----ir al foro-->
-        <ion-item [routerDirection]="'root'" [routerLink]="'/foro'">
-          <ion-icon name="paw"></ion-icon>
-          <ion-label> Ir a pagina Foro </ion-label>
-        </ion-item>
-        
-      </ion-list>
+          <!----ir a publicar-->
+          <ion-item color="primary" [routerDirection]="'root'" [routerLink]="'/publicar'">
+            <ion-icon name="paw"></ion-icon>
+            <ion-label> Hace una publicacion</ion-label>
+          </ion-item>
+
+          <!----ir a Publicaciones del Usuario-->
+          <ion-item color="primary" [routerDirection]="'root'" [routerLink]="'/publicacion-usuario'">
+            <ion-icon name="paw"></ion-icon>
+            <ion-label>Mis publicaciones</ion-label>
+          </ion-item>
+
+          <!----ir a publicaciones que se guardan-->
+          <ion-item color="primary" [routerDirection]="'root'" [routerLink]="'/publicacion-guardada'">
+            <ion-icon name="paw"></ion-icon>
+            <ion-label>publicaciones guardadas</ion-label>
+          </ion-item>
+
+
+
+
+        </ion-list>
 
       </ion-content>
+
+      <ion-button (click)="cerrarsesion()">Cerrar sesíon</ion-button>
+
     </ion-menu>
   </ion-menu-toggle>
 

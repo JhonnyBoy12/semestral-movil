@@ -44,9 +44,22 @@ const routes: Routes = [
     loadChildren: () => import('./pages/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
+    path: 'publicacion-usuario',
+    loadChildren: () => import('./pages/publicacion-usuario/publicacion-usuario.module').then( m => m.PublicacionUsuarioPageModule)
+  },
+  {
+    path: 'publicacion-guardada',
+    loadChildren: () => import('./pages/publicacion-guardada/publicacion-guardada.module').then( m => m.PublicacionGuardadaPageModule)
+  },
+  {
+    path: 'home-admin',
+    loadChildren: () => import('./pages/home-admin/home-admin.module').then( m => m.HomeAdminPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
-  },
+  }
+
 
 
  

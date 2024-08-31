@@ -1,0 +1,30 @@
+ion-button{
+    padding: 0px 30px 20px 30px;
+    --background: #aaeee0;  
+    --color: rgb(73, 69, 69);   
+     
+}
+
+ion-icon{
+    padding-right: 10px;
+}
+
+ion-item{
+    padding: 5px 0 5px 0;
+}
+.usuario{  
+    color: aliceblue;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: baseline;
+
+    .usuario-text{
+        padding-top: 20px;
+    }
+    
+    ion-icon{
+        margin: 10px 0px 13px 13px;
+        width: 80px ;
+        height: 80px;
+    }
+}
