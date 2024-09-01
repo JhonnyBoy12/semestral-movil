@@ -4,36 +4,53 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <div class="logo">
-      <img src="assets/icon/logo.png"/>
+      <img src="assets/icon/logo-admin.png"/>
     </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" color="secondary">
+  <div class="info-container">
+  <div class="info-extra">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-subtitle>Rescates</ion-card-subtitle>
+        <ion-card-title>Información Adicional</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        Usted ha ingresado como administrador. Obtendra funciones únicas.
+      </ion-card-content>
+    </ion-card>
+  </div>
+</div>
   <div class="menu-home-admin">
     <div class="menu-admin">
       <p class="administrar-text">Administrar</p>
+      <img src="assets/icon/logo-admin2.png" style="height: 200px; width: 200px; margin-bottom: 300px;">
       <div class="cards-container">
-        <div class="item item-top-left">
-          <ion-button fill="clear" size="large" class="boton-home-admin" [routerLink]="'/usuarios-admin'">
-            <img src="assets/icon/foroentrada.png">
-          </ion-button>
-          <p class="menu-text">Usuarios</p>
+        <div class="row-top">
+          <div class="item item-top-left">
+            <ion-button fill="clear" size="large" class="boton-home-admin" [routerLink]="'/usuarios-admin'">
+              <img src="assets/icon/foroentrada.png">
+            </ion-button>
+            <p class="menu-text">Usuario</p>
+          </div>
+          <div class="item item-top-right">
+            <ion-button fill="clear" size="large" class="boton-home-admin" [routerLink]="'/publicaciones-admin'">
+              <img src="assets/icon/ubicacionentrada.png">
+            </ion-button>
+            <p class="menu-text">Publicación</p>
+          </div>
         </div>
-        <div class="item item-top-right">
-          <ion-button fill="clear" size="large" class="boton-home-admin" [routerLink]="'/ubicaciones-admin'">
-            <img src="assets/icon/ubicacionentrada.png">
-          </ion-button>
-          <p class="menu-text">Ubicaciones</p>
-        </div>
-        <div class="item item-bottom">
-          <ion-button fill="clear" size="large" class="boton-home-admin" [routerLink]="'/publicaciones-admin'">
-            <img src="assets/icon/ubicacionentrada.png">
-          </ion-button>
-          <p class="menu-text">Publicaciones</p>
+        <div class="row-bottom">
+          <div class="item item-bottom">
+            <ion-button fill="clear" size="large" class="boton-home-admin" [routerLink]="'/ubicaciones-admin'">
+              <img src="assets/icon/ubicacionentrada.png">
+            </ion-button>
+            <p class="menu-text">Ubicación</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </ion-content>
-

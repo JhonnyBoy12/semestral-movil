@@ -16,7 +16,7 @@ export class AppComponent {
     //ALERTA TOAST
   async presentToast(position: 'top' | 'middle' | 'bottom') {
     const toast = await this.toastController.create({
-      message: `Has cerrado sesion correctamente`,
+      message: `Has cerrado sesión correctamente`,
       duration: 2000,
       position: position,
     });

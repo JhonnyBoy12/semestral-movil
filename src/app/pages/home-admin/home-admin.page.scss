@@ -60,24 +60,38 @@
     font-weight: bold;
     font-size: 24px;
     color: rgb(207, 241, 227);
-    margin-bottom: 20px; 
+    margin-bottom: 10px; 
 }
-
 .cards-container {
-    position: relative;
+    display: flex;
+    flex-direction: column; /* Organiza las filas en una columna */
+    justify-content: flex-end; /* Alinea las cartas al final del contenedor */
+    align-items: center;
     width: 100%;
+    margin: 0 auto;
     height: 100%;
-    top: 10%; 
+    position: absolute;
+    bottom: 0;
+    padding: 20px;
+}
+.row-top {
+    display: flex; /* Fila horizontal para Usuarios y Publicaciones */
+    justify-content: center;
+    width: 100%;
+    gap: 20px; /* Espacio entre las cartas */
+    margin-bottom: 20px; /* Espacio entre la fila superior e inferior */
 }
 
+.row-bottom {
+    display: flex; /* Centra la fila inferior */
+    justify-content: center;
+    width: 100%;
+}
 .item {
-    position: absolute;
     text-align: center;
 }
-
 .item-top-left {
-    top: 20%; 
-    left: 15%; 
+    margin-right: 20px; /* Asegura más espacio antes de la carta "Ubicaciones" */
 }
 
 .item-top-right {
@@ -86,33 +100,37 @@
 }
 
 .item-bottom {
-    bottom: 20%; 
-    left: 50%;
-    transform: translateX(-50%); 
+    margin-left: 4px; /* Asegura más espacio antes de la carta "Publicaciones" */
 }
 
 .boton-home-admin {
-    --border-radius: 10px;
+    --border-radius: 12px;
     --background: var(--ion-color-secondary);
-    width: 100px;
-    height: 100px;
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.3s ease-in-out, --background 0.3s ease-in-out;
+}
+
+.boton-home-admin:hover {
+    --background: var(--ion-color-tertiary);
+    transform: scale(1.1);
 }
 
 .boton-home-admin img {
-    height: 70px;
-    width: 70px;
+    height: 40px;
+    width: 40px;
 }
 
 .menu-text {
     margin-top: 10px;
     font-weight: bold;
     font-size: 16px;
-    color: rgb(207, 241, 227);
+    color: #FFFFFF;
 }
-
 ion-button {
     --border-radius: 50%;
     --background: var(--ion-color-secondary);
@@ -129,6 +147,19 @@ ion-button {
     width: 70px;
 }
 
+.info-container {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  
+  .color{
+    color: rgb(89, 94, 87);
+  }
 
+  .info-extra {
+    margin-top: 20px;
 
+  }
+  
 
