@@ -1,0 +1,186 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <div class="superior">
+      <ion-title>Ubicaciones</ion-title>
+      <div class="logo">
+          <img src="assets/icon/logo.png"/>
+      </div>
+    </div>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" color="secondary">
+
+  <div class="division">
+    <ion-label> Lugares cercanos </ion-label>
+    <ion-icon name="add-circle-outline"></ion-icon>
+  </div>
+
+  <div class="lista-ubicaciones">
+
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="assets/icon/location.png"/>
+      </ion-avatar>
+      <ion-label>
+        <h2>Centro Rescate Canino</h2>
+        <p>Vicuña Mackenna 1590</p>
+        <p>(2) 3240 7988</p>
+        <ion-note color="warning">★ 4.4</ion-note>
+      </ion-label>
+      <ion-icon name="trash">
+      <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+      <ion-toast
+        [isOpen]="isToastOpen"
+        message="Ubicación eliminada correctamente."
+        [duration]="3000"
+        (didDismiss)="setOpen(false)"
+      ></ion-toast></ion-icon>
+    </ion-item>
+  
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="assets/icon/location.png"/>
+      </ion-avatar>
+      <ion-label>
+        <h2>Garras y Patas</h2>
+        <p>Sótero del Río 508</p>
+        <p>9 6726 9728</p>
+        <ion-note color="warning">★ 4.7</ion-note>
+      </ion-label>
+      <ion-icon name="trash">
+        <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="assets/icon/location.png"/>
+      </ion-avatar>
+      <ion-label>
+        <h2>Huella Animal</h2>
+        <p>Av. Lo Ovalle 03558</p>
+        <p>(2) 2523 8394</p>
+        <ion-note color="warning">★ 4.5</ion-note>
+      </ion-label>
+       <ion-icon name="trash">
+      <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+      <ion-toast
+        [isOpen]="isToastOpen"
+        message="Ubicación eliminada correctamente."
+        [duration]="3000"
+        (didDismiss)="setOpen(false)"
+      ></ion-toast></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="assets/icon/location.png"/>
+      </ion-avatar>
+      <ion-label>
+        <h2>Ñuñoa Municipalidad</h2>
+        <p>Av. Grecia 5900</p>
+        <p>2 3322 988</p>
+        <ion-note color="warning">★ 4.1</ion-note>
+      </ion-label>
+       <ion-icon name="trash">
+      <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+      <ion-toast
+        [isOpen]="isToastOpen"
+        message="Ubicación eliminada correctamente."
+        [duration]="3000"
+        (didDismiss)="setOpen(false)"
+      ></ion-toast></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="assets/icon/location.png"/>
+      </ion-avatar>
+      <ion-label>
+        <h2>Veterinaria Felina</h2>
+        <p>Providencia 1234</p>
+        <p>(2) 2345 6789</p>
+        <ion-note color="warning">★ 4.6</ion-note>
+      </ion-label>
+       <ion-icon name="trash">
+      <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+      <ion-toast
+        [isOpen]="isToastOpen"
+        message="Ubicación eliminada correctamente."
+        [duration]="3000"
+        (didDismiss)="setOpen(false)"
+      ></ion-toast></ion-icon>
+    </ion-item>
+
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="assets/icon/location.png"/>
+      </ion-avatar>
+      <ion-label>
+        <h2>Pet Food Store</h2>
+        <p>Las Condes 3456</p>
+        <p>(2) 9876 5432</p>
+        <ion-note color="warning">★ 4.8</ion-note>
+      </ion-label>
+       <ion-icon name="trash">
+      <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+      <ion-toast
+        [isOpen]="isToastOpen"
+        message="Ubicación eliminada correctamente."
+        [duration]="3000"
+        (didDismiss)="setOpen(false)"
+      ></ion-toast></ion-icon>
+    </ion-item>
+  </div>
+
+  <ion-item>
+    <ion-avatar slot="start">
+      <img src="assets/icon/location.png"/>
+    </ion-avatar>
+    <ion-label>
+      <h2>Veterinaria Felina</h2>
+      <p>Providencia 1234</p>
+      <p>(2) 2345 6789</p>
+      <ion-note color="warning">★ 4.6</ion-note>
+    </ion-label>
+     <ion-icon name="trash">
+      <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+      <ion-toast
+        [isOpen]="isToastOpen"
+        message="Ubicación eliminada correctamente."
+        [duration]="3000"
+        (didDismiss)="setOpen(false)"
+      ></ion-toast></ion-icon>
+  </ion-item>
+
+    
+  <ion-item>
+      <ion-avatar slot="start">
+        <img src="assets/icon/location.png"/>
+      </ion-avatar>
+      <ion-label>
+        <h2>Centro Rescate Canino</h2>
+        <p>Vicuña Mackenna 1590</p>
+        <p>(2) 3240 7988</p>
+        <ion-note color="warning">★ 4.4</ion-note>
+      </ion-label>
+      <ion-icon name="trash">
+        <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast></ion-icon>
+  </ion-item>
+  
+</ion-content>

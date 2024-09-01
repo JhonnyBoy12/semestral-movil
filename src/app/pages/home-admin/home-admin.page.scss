@@ -30,3 +30,105 @@
   #container a {
     text-decoration: none;
   }
+
+
+  ////footer admin
+
+  .menu-home-admin {
+    background-color: var(--ion-color-primary);
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    height: 70%;
+    padding: 15px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+    clip-path: ellipse(75% 100% at 50% 100%);
+}
+
+.menu-admin {
+    position: relative; 
+    height: 100%;
+    padding: 20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.administrar-text {
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(207, 241, 227);
+    margin-bottom: 20px; 
+}
+
+.cards-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 10%; 
+}
+
+.item {
+    position: absolute;
+    text-align: center;
+}
+
+.item-top-left {
+    top: 20%; 
+    left: 15%; 
+}
+
+.item-top-right {
+    top: 20%; 
+    right: 15%; 
+}
+
+.item-bottom {
+    bottom: 20%; 
+    left: 50%;
+    transform: translateX(-50%); 
+}
+
+.boton-home-admin {
+    --border-radius: 10px;
+    --background: var(--ion-color-secondary);
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.boton-home-admin img {
+    height: 70px;
+    width: 70px;
+}
+
+.menu-text {
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgb(207, 241, 227);
+}
+
+ion-button {
+    --border-radius: 50%;
+    --background: var(--ion-color-secondary);
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    margin-left: auto;
+    height: 70px;
+    width: 70px;
+}
+
+
+
+

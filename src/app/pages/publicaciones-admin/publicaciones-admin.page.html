@@ -13,9 +13,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" color="secondary">
-  <div class="titulo-foro">
-    <ion-title>Tu foro donde podras adoptar</ion-title>
-  </div>
   
   <div class="card-publicacion">
     <div class="perfil">
@@ -24,7 +21,105 @@
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
+      </ion-card-header>
+      
+      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
+
+      <ion-card-content>
+        Descripción breve de la publicación. Algo atractivo para llamar la atención.
+      </ion-card-content>
+
+      <ion-row class="boton-accion">
+        <ion-col>
+          <ion-button fill="clear" color="dark">
+            <ion-icon name="bookmark-outline"></ion-icon>
+            Guardar
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button fill="clear" color="dark">
+            <ion-icon name="call-outline"></ion-icon>
+            Contactar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+
+  <div class="card-publicacion">
+    <div class="perfil">
+      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
+      <span class="nombre">Nombre de Usuario</span>
+    </div>
+    <ion-card class="card-conten">
+      <ion-card-header>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
+      </ion-card-header>
+      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
+
+      <ion-card-content>
+        Descripción breve de la publicación. Algo atractivo para llamar la atención.
+      </ion-card-content>
+
+      <ion-row class="boton-accion">
+        <ion-col>
+          <ion-button fill="clear" color="dark">
+            <ion-icon name="bookmark-outline"></ion-icon>
+            Guardar
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button fill="clear" color="dark">
+            <ion-icon name="call-outline"></ion-icon>
+            Contactar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+
+  <div class="card-publicacion">
+    <div class="perfil">
+      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
+      <span class="nombre">Nombre de Usuario</span>
+    </div>
+    <ion-card class="card-conten">
+      <ion-card-header>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
       </ion-card-header>
 
       <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
@@ -57,7 +152,18 @@
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
       </ion-card-header>
 
       <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
@@ -90,7 +196,18 @@
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
       </ion-card-header>
 
       <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
@@ -123,7 +240,18 @@
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
       </ion-card-header>
 
       <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
@@ -156,7 +284,18 @@
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
       </ion-card-header>
 
       <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
@@ -189,9 +328,19 @@
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
       </ion-card-header>
-
       <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
 
       <ion-card-content>
@@ -222,73 +371,18 @@
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <ion-card-title>Título de la Publicación</ion-card-title>
+        <div class="header-content">
+          <ion-card-title>Título de la Publicación</ion-card-title>
+          <ion-icon name="trash" class="icon-trash">
+            <ion-button expand="block" (click)="setOpen(true)">Open</ion-button>
+        <ion-toast
+          [isOpen]="isToastOpen"
+          message="Ubicación eliminada correctamente."
+          [duration]="3000"
+          (didDismiss)="setOpen(false)"
+        ></ion-toast>
+          </ion-icon>
+        </div>
       </ion-card-header>
 
       <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
@@ -314,6 +408,3 @@
     </ion-card>
   </div>
 </ion-content>
-
-
-

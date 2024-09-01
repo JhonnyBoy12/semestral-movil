@@ -56,15 +56,21 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home-admin/home-admin.module').then( m => m.HomeAdminPageModule)
   },
   {
+    path: 'usuarios-admin',
+    loadChildren: () => import('./pages/usuarios-admin/usuarios-admin.module').then( m => m.UsuariosAdminPageModule)
+  },
+  {
+    path: 'ubicaciones-admin',
+    loadChildren: () => import('./pages/ubicaciones-admin/ubicaciones-admin.module').then( m => m.UbicacionesAdminPageModule)
+  },
+  {
+    path: 'publicaciones-admin',
+    loadChildren: () => import('./pages/publicaciones-admin/publicaciones-admin.module').then( m => m.PublicacionesAdminPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
   }
-
-
-
- 
-
-
 
 ];
 
