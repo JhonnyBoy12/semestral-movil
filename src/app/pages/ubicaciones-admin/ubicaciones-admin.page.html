@@ -1,10 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <div class="superior">
-      <ion-title>Ubicaciones</ion-title>
+      <ion-title>Administra ubicaciones</ion-title>
       <div class="logo">
           <img src="assets/icon/logo.png"/>
       </div>
@@ -14,10 +14,11 @@
 
 <ion-content [fullscreen]="true" color="secondary">
 
-  <div class="division">
-    <ion-label> Lugares cercanos </ion-label>
-    <ion-icon name="add-circle-outline"></ion-icon>
-  </div>
+  <ion-button expand="full" color="primary">
+    <ion-label> Añadir ubicacion vista </ion-label>
+    <ion-icon style="padding-left: 7px;" name="add-circle-outline"></ion-icon>
+    
+  </ion-button>
 
   <div class="lista-ubicaciones">
 

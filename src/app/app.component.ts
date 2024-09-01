@@ -13,8 +13,19 @@ export class AppComponent {
   constructor(private router:Router, private alertContorller:AlertController,
     private toastController: ToastController) {}
 
-  cerrarsesion(){
+    //ALERTA TOAST
+  async presentToast(position: 'top' | 'middle' | 'bottom') {
+    const toast = await this.toastController.create({
+      message: `Has cerrado sesion correctamente`,
+      duration: 2000,
+      position: position,
+    });
 
+    await toast.present();
+  }
+
+  cerrarsesion(){
+    this.presentToast('bottom');
     this.router.navigate(['/iniciar']);
   }
 }

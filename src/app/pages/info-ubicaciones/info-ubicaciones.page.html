@@ -9,6 +9,45 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="secondary">
+  <div class="informacion">
+    <ion-icon name="paw" ></ion-icon><h1 class="titulo">Huella Animal</h1>
+    <p class="direccion">Dirección: Diego Almagro #346 <ion-icon name="pin"></ion-icon></p>
+    <p class="horario">Horarios: Lunes a Viernes 9:00 AM - 6:00 PM</p>
+    <p class="descripcion">Centro de rescate encargados de recuperar a distintos animales</p>
+  </div>
+
+  <div class="info-container">
+    
+      <div class="especialidades">
+        <ion-chip color="primary">Perros y Gatos</ion-chip>
+        <ion-chip color="primary">Rescates</ion-chip>
+        <ion-chip color="primary">Otros Animales</ion-chip>
+      
+    </div>
+    <div class="info-extra">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-subtitle>Rescates</ion-card-subtitle>
+          <ion-card-title>Información Adicional</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          Más detalles sobre las operaciones, horas de atención, condiciones especiales, reglas, lo que se hace y tambien xosas especficas del sitio etc.
+        </ion-card-content>
+        <ion-button expand="block" routerLink="/home" class="color">
+          <ion-icon slot="start" name="navigate-outline"></ion-icon>
+          Ver en Mapa
+        </ion-button>
+      </ion-card>
+    </div>
+  </div>
+  
+  
+    
+      <ion-button expand="full" color="primary" style="padding: 0 30px; margin-top: 20px;">
+        <ion-icon name="call-outline" style="padding-right: 5px;"></ion-icon>
+        Contactar sitio/Llamar
+      </ion-button>
+    
   
 </ion-content>

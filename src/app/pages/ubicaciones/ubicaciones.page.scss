@@ -11,18 +11,20 @@
     
 }
 
-.division {
-    margin: 8px 10px 5px 5px;
-    background-color: #0ce4a3;
-    color: #fff;
-    padding: 13px 10px 13px 10px;
-    font-weight: bold;
+.titulo-foro{
+  background: rgb(138, 231, 203);
+  border-radius: 5px;
+  height: 60px;
+  margin: 0px 8px 3px 5px;
+  box-shadow: 5px 4px 6px rgba(0, 0, 0, 0.1);
+ 
+  ion-title{
     font-size: 1.3rem;
+    font-weight: bold;
+    padding: 20px;
     text-align: center;
-    border-radius: 5px;
-    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
   }
-
+}
 .lista-ubicaciones{
     padding-top: 10px;
 }
