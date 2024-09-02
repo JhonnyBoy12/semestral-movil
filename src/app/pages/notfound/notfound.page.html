@@ -1,7 +1,11 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Not Found</ion-title>
-    
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <div class="logo">
+        <img src="assets/icon/logo.png"/>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -13,13 +17,14 @@
   </ion-header>
   <div id="notfound">
     <div id="imagenNot">
-      <img src="assets/notfound/notfound.png" alt="">
+      <img src="assets/icon/notfound.png" alt="">
     </div>
     <br>
-    <p>404. Página no encontrada</p>
-    <h5>La URL ingresada no pudo ser encontrada.</h5>
-    <br>
-    <ion-button [routerLink]="['/home']">Volver al menú principal</ion-button>
+     
+      <p>404. Página no encontrada</p>
+      <h5>La URL ingresada no pudo ser encontrada.</h5>
+      <br>
+      <ion-button  [routerLink]="['/home']">Volver al menú principal</ion-button>
   </div>
   
 </ion-content>
