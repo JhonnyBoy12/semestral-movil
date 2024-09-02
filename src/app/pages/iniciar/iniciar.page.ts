@@ -59,7 +59,7 @@ export class IniciarPage implements OnInit {
   //ALERTA TOAST
   async presentToast(position: 'top' | 'middle' | 'bottom') {
     const toast = await this.toastController.create({
-      message: `Ha iniciado correctamente, ¡Hola ${this.nombre}!`,
+      message: `Ha iniciado como administrador correctamente, ¡Hola!`,
       duration: 1500,
       position: position,
     });
