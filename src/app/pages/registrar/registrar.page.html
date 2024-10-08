@@ -1,5 +1,4 @@
 <ion-header [translucent]="true">
-  
 </ion-header>
 
 <ion-content [fullscreen]="true" color="header">
@@ -22,23 +21,47 @@
             [(ngModel)]="nombreUsuario"
             name="nombreUsuario"></ion-input>
           </ion-item>
+          <ion-item color="null" lines="none">
+            <ion-text color="medium">
+              <small>
+                Su nombre de usuario debe tener como minimo 6 caracteres.
+              </small>
+            </ion-text>
+          </ion-item>
 
           <ion-item color="light">
-            <ion-input type="Email" label="Email" labelPlacement="floating" placeholder="Ingrese su correo" ngModelemail
+            <ion-input type="Email" label="Email" labelPlacement="floating" placeholder="Ingrese su correo"
             [(ngModel)]="email"
             name="email"></ion-input>
           </ion-item>
 
           <ion-item color="light">
-            <ion-input type="tel" label="Telefono" labelPlacement="floating" placeholder="Ingrese su numero de teléfono" ngModelemail
+            <ion-label slot="start">+56 9</ion-label>
+            <ion-input type="tel" label="Teléfono" labelPlacement="floating" placeholder="99999999"
             [(ngModel)]="telefono"
-            name="teléfono"></ion-input>
+            (ionInput)="validarSoloNumeros($event)"
+            name="telefono"></ion-input>
           </ion-item>
 
           <ion-item color="light">
             <ion-input type="password" label="Contraseña" labelPlacement="floating" placeholder="Ingrese su contraseña"
             [(ngModel)]="contra"
             name="contra"></ion-input>
+          </ion-item>
+
+          <ion-item color="null" lines="none">
+            <ion-text color="medium">
+              <small>
+                La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, un número y un signo.
+              </small>
+            </ion-text>
+          </ion-item>
+          
+
+          <ion-item color="light">
+            <ion-input type="password" label="Confirmar Contraseña" labelPlacement="floating" placeholder="Confirme su contraseña"
+            [(ngModel)]="confirmarContra"
+            name="confirmarContra"></ion-input>
           </ion-item>
 
           <ion-button (click)="registrar()">
@@ -48,7 +71,7 @@
 
         <ion-row class="register-link">
           <ion-col class="ion-text-center">
-            <ion-router-link [routerLink]="['/iniciar']">¿Ya tienes una cuenta? Inicia sesion</ion-router-link>
+            <ion-router-link [routerLink]="['/iniciar']">¿Ya tienes una cuenta? Inicia sesión</ion-router-link>
           </ion-col>
         </ion-row>
       </ion-card-content>

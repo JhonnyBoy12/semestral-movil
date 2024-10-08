@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SQLiteObject } from '@awesome-cordova-plugins/sqlite';
-import { SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
+import { SQLiteObject, SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 
@@ -17,7 +16,7 @@ export class ServicebdService {
 
   administrador: string = "CREATE TABLE IF NOT EXISTS administrador(id_administrador INTEGER PRIMARY KEY AUTOINCREMENT, id_rol INTEGER NOT NULL, nombre TEXT NOT NULL, correo_electronico TEXT NOT NULL, contrasena TEXT NOT NULL, telefono TEXT NOT NULL, FOREIGN KEY (id_rol) REFERENCES rol (id_rol));";
 
-  usuario: string = "CREATE TABLE IF NOT EXISTS usuarios(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario TEXT NOT NULL, correo_usuario TEXT NOT NULL, contrasena_usuario TEXT NOT NULL, id_rol INTEGER NOT NULL, foto TEXT, FOREIGN KEY (id_rol) REFERENCES rol (id_rol));";
+  usuario: string = "CREATE TABLE IF NOT EXISTS usuarios(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT, nombre_usuario TEXT NOT NULL, correo_usuario TEXT NOT NULL, contrasena_usuario TEXT NOT NULL, id_rol INTEGER NOT NULL, telefono TEXT NOT NULL, foto TEXT, FOREIGN KEY (id_rol) REFERENCES rol (id_rol));";
 
   categoria: string = "CREATE TABLE IF NOT EXISTS categorias(id_categoria INTEGER PRIMARY KEY AUTOINCREMENT, nombre_categoria TEXT NOT NULL);";
 
@@ -59,7 +58,7 @@ export class ServicebdService {
     this.platform.ready().then(()=>{
       //PROCEDIMIENTO CREACION BD
       this.sqlite.create({
-        name: 'noticias.db',
+        name: 'petCareMap.db',
         location:'default'
       }).then((db: SQLiteObject)=>{
         //CAPTURA Y CONEXION BASE DE DATOS

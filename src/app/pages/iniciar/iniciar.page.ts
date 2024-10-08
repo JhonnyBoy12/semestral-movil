@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-iniciar',
@@ -21,7 +22,7 @@ export class IniciarPage implements OnInit {
   contraInicio:string="";
 
   constructor(private router:Router, private alertController: AlertController,private activedroute: ActivatedRoute,
-    private toastController: ToastController) { 
+    private toastController: ToastController, private bd: ServicebdService) { 
     //realizar la captura de informacion que viene por mi "CONTEXT"
     this,activedroute.queryParams.subscribe(param =>{
       //VALIDAMOS SI VIENE O NO LA INFORMACION
