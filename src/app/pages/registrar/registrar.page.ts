@@ -12,9 +12,10 @@ export class RegistrarPage implements OnInit {
 
   nombreUsuario:string="";
   email:string="";
-  telefono:string="";
+  telefono?: number;
   contra:string="";
   confirmarContra:string=""; // Nueva variable para confirmar la contraseña
+  id_rol: number=2;
 
   constructor(private router:Router, private alertController:AlertController,
     private toastController: ToastController, private bd: ServicebdService) { }
@@ -36,7 +37,7 @@ export class RegistrarPage implements OnInit {
   }
 
   // Función para validar teléfono
-  validarTelefono(telefono: string): boolean {
+  validarTelefono(telefono: number): boolean {
     const validarTe = /^[0-9]{8}$/; // Se requiere exactamente 9 dígitos
     return validarTe.test(String(telefono));
   }
@@ -119,17 +120,8 @@ export class RegistrarPage implements OnInit {
       return;
     }
 
-    // Si todo es válido, procedemos a registrar
-    let context: NavigationExtras = {
-      state: {
-        usuario: this.nombreUsuario,
-        mail: this.email,
-        tel: '+569' + this.telefono,  // Teléfono formateado
-        cont: this.contra,
-      },
-    };
-
+    this.bd.ingresarUsuario(this.nombreUsuario, this.email, this.telefono, this.contra, this.id_rol);
     this.presentToast('bottom');
-    this.router.navigate(['/iniciar'], context);
+    this.router.navigate(['/iniciar']);
   }
 }

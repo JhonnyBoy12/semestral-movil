@@ -4,7 +4,7 @@ export class Usuario {
     correo_usuario: string;
     contrasena_usuario: string;
     id_rol: number;
-    telefono: string; 
+    telefono: number; 
     foto?: string; 
   
     constructor(
@@ -13,7 +13,7 @@ export class Usuario {
       correo_usuario: string,
       contrasena_usuario: string,
       id_rol: number,
-      telefono: string, 
+      telefono: number, 
       foto?: string 
     ) {
       this.id_usuario = id_usuario;

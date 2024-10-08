@@ -10,34 +10,14 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class IniciarPage implements OnInit {
 
-  adminEmail:string="admin@gmail.com";
-  adminContra:string="admin";
 
-  nombre: string="";
   email:string="";
-  telefono:string="";
   contra:string="";
 
-  emailInicio:string="";
-  contraInicio:string="";
 
   constructor(private router:Router, private alertController: AlertController,private activedroute: ActivatedRoute,
     private toastController: ToastController, private bd: ServicebdService) { 
-    //realizar la captura de informacion que viene por mi "CONTEXT"
-    this,activedroute.queryParams.subscribe(param =>{
-      //VALIDAMOS SI VIENE O NO LA INFORMACION
-      if(this.router.getCurrentNavigation()?.extras.state){
-        //capturamos la informacion
-        this.nombre = this.router.getCurrentNavigation()?.extras?.state?.['usuario'];
-        this.email = this.router.getCurrentNavigation()?.extras?.state?.['mail'];
-        this.telefono = this.router.getCurrentNavigation()?.extras?.state?.['tel'];
-        this.contra = this.router.getCurrentNavigation()?.extras?.state?.['cont'];
-        
-      }
-    });
-
-
-
+  
   }
 
   ngOnInit() {
@@ -58,60 +38,43 @@ export class IniciarPage implements OnInit {
     await alert.present();
   }
   //ALERTA TOAST
-  async presentToast(position: 'top' | 'middle' | 'bottom') {
+  async presentToast(position: 'top' | 'middle' | 'bottom',usuario:string="") {
     const toast = await this.toastController.create({
-      message: `Ha iniciado como administrador correctamente, ¡Hola!`,
+      message: "Ha iniciado como " + usuario + " correctamente, ¡Hola!",
       duration: 1500,
       position: position,
     });
-
-    await toast.present();
   }
 
-  iniciar(){
-    if (!this.emailInicio) {
+  async iniciar(){
+    if (!this.email) {
       this.presentAlert('Por favor ingrese su correo electrónico.');
       return;
     }
 
-    if (!this.contraInicio) {
+    if (!this.contra) {
       this.presentAlert('Por favor ingrese su contraseña.');
       return;
     }
 
-    if (!this.validarEmail(this.emailInicio)) {
+    if (!this.validarEmail(this.email)) {
       this.presentAlert('Por favor ingrese un correo electrónico válido.');
       return;
     }
 
-    if (this.adminEmail == this.emailInicio || this.adminContra == this.contraInicio){
-      this.router.navigate(['/home-admin']);
-      this.presentToast('bottom');
-      return;
-    }
-
-    if (this.email !== this.emailInicio || this.contra !== this.contraInicio) {
-      this.presentAlert('Correo electrónico o contraseña incorrectos.');
-      return;
-    }
-
-
-    ///variables de contexto
-    let context: NavigationExtras = {
-      state:{
-        usuarioMen:this.nombre,
-        mailMen:this.email,
-        telMen:this.telefono,
-        contMen:this.contra,
-        mailinicioMen:this.emailInicio,
-        contrainicioMen:this.contraInicio
+    const usuario = await this.bd.validarUsuario(this.email, this.contra);
+    if (usuario){
+      //si encuentra el usuario accede a la interfaz
+      if (usuario.id_rol === 1 ){ /// es el id del admin de la base de datos
+        this.router.navigate(['/home-admin']);
+        this.presentToast('bottom',"administrador");
+      } else {
+        this.router.navigate(['/home']); ///rol usuario
+        this.presentToast('bottom',"usuario");
       }
-
+    }else{
+      this.presentAlert('Correo electrónico o contraseña invalida.');
     }
-
-    this.presentToast('bottom');
-    this.router.navigate(['/home'],context);
   }
-  
-  
+
 }

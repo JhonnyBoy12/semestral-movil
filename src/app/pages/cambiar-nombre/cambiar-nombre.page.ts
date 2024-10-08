@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-cambiar-nombre',
@@ -6,8 +8,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./cambiar-nombre.page.scss'],
 })
 export class CambiarNombrePage implements OnInit {
-
-  constructor() { }
+  nombreRecibido: any;
+  constructor(private bd: ServicebdService, private router: Router) { }
 
   ngOnInit() {
   }
