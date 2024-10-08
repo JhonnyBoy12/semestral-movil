@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <div class="superior">
+      <ion-title>Agregar Ubicaciones</ion-title>
+      <div class="logo">
+          <img src="assets/icon/logo-admin.png"/>
+      </div>
+    </div>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="perfil">
+    
+    <div class="perfil-card">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Agregar ubicacion vista</ion-card-title>
+          <ion-card-subtitle>Asegurese de ingresar todos los datos requeridos</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          
+            <ion-item>
+              <ion-label position="stacked">Ingresa el nombre del sitio</ion-label>
+              <ion-input label="Nombre Ubicacion" labelPlacement="floating" placeholder="Ingrese el nombre"
+              [(ngModel)]="nombreUbicacion"></ion-input>
+              <ion-icon slot="end" name="alert-circle-sharp"></ion-icon>
+            </ion-item>
+
+            <!--FALTACOMUNA-->
+
+            <!--------------->
+
+            <ion-item>
+              <ion-label position="stacked">Ingresa un subtitulo</ion-label>
+              <ion-input label="Subtitulo" labelPlacement="floating" placeholder="Ingrese el subtitulo"
+              [(ngModel)]="subtitulo"></ion-input>
+              <ion-icon slot="end" name="alert-circle-sharp"></ion-icon>
+            </ion-item>
+
+        
+            <ion-item>
+              <ion-label position="stacked">Ingresa su direccion</ion-label>
+              <ion-input label="Direccion" labelPlacement="floating" placeholder="Ingrese la direccion"
+              [(ngModel)]="direccion"></ion-input>
+              <ion-icon slot="end" name="alert-circle-sharp"></ion-icon>
+            </ion-item>
+
+            <!----IMAGEN----->
+
+            <!--------------->
+        
+            <ion-item>
+              <ion-label position="stacked">Teléfono</ion-label>
+              <ion-input value="912345678" [readonly]="true"></ion-input>
+              <ion-icon slot="end" name="create"></ion-icon>
+            </ion-item>
+        
+            <ion-item>
+              <ion-label position="stacked">Contraseña</ion-label>
+              <ion-input type="password" value="Tu Contraseña">
+                <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+                <ion-icon slot="end" name="create"></ion-icon>
+              </ion-input>
+            </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+</ion-content>

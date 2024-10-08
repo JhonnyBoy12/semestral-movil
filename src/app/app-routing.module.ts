@@ -68,9 +68,22 @@ const routes: Routes = [
     loadChildren: () => import('./pages/publicaciones-admin/publicaciones-admin.module').then( m => m.PublicacionesAdminPageModule)
   },
   {
+    path: 'agregar-ubicacion',
+    loadChildren: () => import('./pages/agregar-ubicacion/agregar-ubicacion.module').then( m => m.AgregarUbicacionPageModule)
+  },
+  {
+    path: 'cambiar-nombre',
+    loadChildren: () => import('./pages/cambiar-nombre/cambiar-nombre.module').then( m => m.CambiarNombrePageModule)
+  },
+  {
+    path: 'cambiar-contra',
+    loadChildren: () => import('./pages/cambiar-contra/cambiar-contra.module').then( m => m.CambiarContraPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
-  }
+  },
+
 
 ];
 

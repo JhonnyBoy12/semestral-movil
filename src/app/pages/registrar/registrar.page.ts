@@ -98,7 +98,7 @@ export class RegistrarPage implements OnInit {
     }
 
     if (!this.validarTelefono(this.telefono)) {
-      this.presentAlert('Por favor ingrese un número de teléfono válido de 9 dígitos.');
+      this.presentAlert('Por favor ingrese un número de teléfono válido de los 8 dígitos restantes.');
       return;
     }
 
