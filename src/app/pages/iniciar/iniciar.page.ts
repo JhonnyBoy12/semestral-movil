@@ -88,5 +88,4 @@ export class IniciarPage implements OnInit {
       this.presentAlert('Correo electrónico o contraseña inválida.');
     }
   }
-
 }
