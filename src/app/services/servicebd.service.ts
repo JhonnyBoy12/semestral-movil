@@ -39,8 +39,8 @@ export class ServicebdService {
 
 
   ////INSERTS TABLA ROL
-  rolAdmin: string = "INSERT or IGNORE INTO usuarios(id_rol, nombre_rol ) VALUES (1, 'Administrador')";
-  rolUsuario: string = "INSERT or IGNORE INTO usuarios(id_rol, nombre_rol ) VALUES (2, 'Usuario')";
+  rolAdmin: string = "INSERT or IGNORE INTO rol(id_rol, nombre_rol ) VALUES (1, 'Administrador')";
+  rolUsuario: string = "INSERT or IGNORE INTO rol(id_rol, nombre_rol ) VALUES (2, 'Usuario')";
 
   ////INSERTS TABLA COMUNAS
   comunaSantiago: string = "INSERT OR IGNORE INTO comunas(nombre_comuna) VALUES ('Santiago')";
@@ -269,7 +269,7 @@ export class ServicebdService {
               contrasena_usuario: res.rows.item(i).contrasena_usuario,
               id_rol: res.rows.item(i).id_rol,
               telefono: res.rows.item(i).telefono
-            })
+            });
           }
         }
         this.listadoUsuarios.next(items as any);
@@ -337,16 +337,14 @@ export class ServicebdService {
     })
   }
   /////////////////////////////
-
+  
   //INGRESO DE USUARIO (REGISTRAR USUARIO)
-    ingresarUsuario(nombreUsuario:String, email: String, contra:String, id_rol:number, telefono: String){
-      return this.database.executeSql('INSERT INTO usuarios(nombre_usuario,correo_usuario,contrasena_usuario,id_rol,telefono) VALUES (?,?,?,?,?)',[nombreUsuario,email,contra,id_rol,telefono]).then(res=>{
-        this.presentAlert("Ingresar", "Usuario Registrado");
-        this.consultarUsuarios();
-      }).catch(e=>{
-        this.presentAlert("Insertar", "Error: " + JSON.stringify(e));
-      })
-    }
+  ingresarUsuario(nombreUsuario: string, email: string, contra: string, id_rol: number, telefono: string) {
+    const query = `INSERT INTO usuarios (nombre_usuario, correo_usuario, contrasena_usuario, id_rol, telefono) VALUES (?, ?, ?, ?, ?)`;
+    return this.database.executeSql(query, [nombreUsuario, email, contra, id_rol, telefono])
+        .then(() => console.log('Usuario registrado correctamente'))
+        .catch(e => console.error('Error al registrar el usuario', e));
+}
 
   //FUNCIONES MOFIFICACION USUARIO BD
   modificarContraUsuario(id_usuario:number, contrasena_usuario:string){
@@ -367,25 +365,22 @@ export class ServicebdService {
   }
 
   //METODO INICIAR SESION
-  validarUsuario(email:string, contrasena:string):Promise<Usuario | null>{
-    return this.database.executeSql('SELECT FROM usuarios where correo_usuario = ? AND contrasena_usuario = ?', [email,contrasena]).then(res =>{
-      if(res.rows.lenght > 0){
-        return{
-          id_usuario: res.rows.item(0).id_usuario,
-          nombre_usuario: res.rows.item(0).nombre_usuario,
-          correo_usuario: res.rows.item(0).correo_usuario,
-          contrasena_usuario: res.rows.item(0).contrasena_usuario,
-          id_rol: res.rows.item(0).id_rol,
-          telefono: res.rows.item(0).telefono,
-        }as Usuario;
-      }
-      return null;
-    }).catch(e =>{
-      this.presentAlert("Error al validar datos de usuario", "ERROR" + JSON.stringify(e))
-      return null;
-    })
- 
-  }
+  async validarUsuario(email: string, contra: string) {
+    const query = `SELECT id_usuario, nombre_usuario, id_rol,
+                   CASE 
+                     WHEN id_rol = 1 THEN 'Administrador' 
+                     WHEN id_rol = 2 THEN 'Usuario' 
+                   END AS nombre_rol 
+                   FROM usuarios WHERE correo_usuario = ? AND contrasena_usuario = ?`;
+    
+    const result = await this.database.executeSql(query, [email, contra]);
+    
+    if (result.rows.length > 0) {
+        return result.rows.item(0); // Retorna el usuario encontrado
+    } else {
+        return null; // Usuario no encontrado
+    }
+}
 
 
   // Añade esta función en tu servicio

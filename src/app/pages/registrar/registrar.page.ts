@@ -117,8 +117,13 @@ export class RegistrarPage implements OnInit {
     // Convertir el teléfono a número antes de llamar a la BD
     
 
-    this.bd.ingresarUsuario(this.nombreUsuario, this.email, this.contra, this.id_rol, this.telefono);
-    this.presentToast('bottom');
-    this.router.navigate(['/iniciar']);
+    this.bd.ingresarUsuario(this.nombreUsuario, this.email, this.contra, this.id_rol, this.telefono)
+    .then(() => {
+      this.presentToast('bottom');
+      this.router.navigate(['/iniciar']);
+    })
+    .catch((error) => {
+      this.presentAlert('Error al registrarse: ' + error.message);
+    });
   }
 }

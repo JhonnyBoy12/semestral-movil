@@ -10,44 +10,46 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
   styleUrls: ['./iniciar.page.scss'],
 })
 export class IniciarPage implements OnInit {
+  email: string = "";
+  contra: string = "";
 
+  constructor(
+    private router: Router, 
+    private alertController: AlertController,
+    private activedroute: ActivatedRoute,
+    private toastController: ToastController, 
+    private bd: ServicebdService, 
+    private storage: NativeStorage
+  ) {}
 
-  email:string="";
-  contra:string="";
-
-
-  constructor(private router:Router, private alertController: AlertController,private activedroute: ActivatedRoute,
-    private toastController: ToastController, private bd: ServicebdService, private storage: NativeStorage) { 
-  
-  }
-
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   validarEmail(email: string): boolean {
     const validarEm = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return validarEm.test(String(email).toLowerCase());
   }
-  //ALERTA RECUADRO
+
+  // ALERTA RECUADRO
   async presentAlert(message: string) {
     const alert = await this.alertController.create({
-      header: 'Error al iniciar sesion',
+      header: 'Error al iniciar sesión',
       message: message,
       buttons: ['OK']
     });
-
     await alert.present();
   }
-  //ALERTA TOAST
-  async presentToast(position: 'top' | 'middle' | 'bottom',usuario:string="") {
+
+  // ALERTA TOAST
+  async presentToast(position: 'top' | 'middle' | 'bottom', usuario: string = "") {
     const toast = await this.toastController.create({
       message: "Ha iniciado como " + usuario + " correctamente, ¡Hola!",
       duration: 1500,
       position: position,
     });
+    await toast.present(); // Agregar esta línea
   }
 
-  async iniciar(){
+  async iniciar() {
     if (!this.email) {
       this.presentAlert('Por favor ingrese su correo electrónico.');
       return;
@@ -74,11 +76,11 @@ export class IniciarPage implements OnInit {
       }).then(
         () => {
           // Si encuentra el usuario, accede a la interfaz
-          if (usuario.id_rol === 1) { /// es el id del admin de la base de datos
+          if (usuario.id_rol === 1) { // es el id del admin de la base de datos
             this.router.navigate(['/home-admin']);
             this.presentToast('bottom', "administrador");
           } else {
-            this.router.navigate(['/home']); ///rol usuario
+            this.router.navigate(['/home']); // rol usuario
             this.presentToast('bottom', "usuario");
           }
         },

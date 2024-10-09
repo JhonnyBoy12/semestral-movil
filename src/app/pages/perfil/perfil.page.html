@@ -14,49 +14,48 @@
 
 <ion-content [fullscreen]="true" color="secondary">
   <div class="perfil">
+    <ion-button (click)="takePicture()">
     <div class="perfil-foto">
-      <img src="assets/icon/perfil.jpg" alt="Foto de perfil">
+      <img *ngIf="foto"[src]="" alt="Foto de perfil">
     </div>
+    </ion-button>
 
     <div class="perfil-card">
       <ion-card>
         <ion-card-header>
-          <ion-card-title>Nombre Usuario</ion-card-title>
-          <ion-card-subtitle>Apellidos de Usuario</ion-card-subtitle>
+          <ion-card-title>{{ usuario.nombre_usuario }}</ion-card-title>
         </ion-card-header>
 
         <ion-card-content>
+          <ion-item>
+            <ion-label position="stacked">Nombre de usuario</ion-label>
+            <ion-input [(ngModel)]="usuario.nombre_usuario" [readonly]="true"></ion-input>
+          </ion-item>
           
-            <ion-item>
-              <ion-label position="stacked">Nombre de usuario</ion-label>
-              <ion-input value="Usuario"></ion-input>
-              <ion-icon slot="end" name="create"></ion-icon>
-            </ion-item>
-        
-            <ion-item>
-              <ion-label position="stacked">Email</ion-label>
-              <ion-input value="prueba@gmail.com"></ion-input>
-              <ion-icon slot="end" name="create"></ion-icon>
-            </ion-item>
-        
-            <ion-item>
-              <ion-label position="stacked">Teléfono</ion-label>
-              <ion-input value="912345678" [readonly]="true"></ion-input>
-              <ion-icon slot="end" name="create"></ion-icon>
-            </ion-item>
-        
-            <ion-item>
-              <ion-label position="stacked">Contraseña</ion-label>
-              <ion-input type="password" value="Tu Contraseña">
-                <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-                <ion-icon slot="end" name="create"></ion-icon>
-              </ion-input>
-            </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input [(ngModel)]="usuario.correo_usuario" [readonly]="true"></ion-input>
+  
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="stacked">Teléfono</ion-label>
+            <ion-input [(ngModel)]="usuario.telefono" [readonly]="true"></ion-input>
 
-            <ion-button>Modificar Nombre De Usuario</ion-button>
-            <ion-button>Modificar</ion-button>
+          </ion-item>
+          
+          <ion-item>
+            <ion-label position="stacked">Contraseña</ion-label>
+            <ion-input type="password" [(ngModel)]="usuario.contrasena_usuario" [readonly]="true">
+              <ion-input-password-toggle slot="end" ></ion-input-password-toggle>
+            </ion-input>
+          </ion-item>
+
+          <ion-button (click)="cambiarNombre()">Modificar Nombre De Usuario</ion-button>
+          <ion-button (click)="cambiarContra()">Modificar Contraseña</ion-button>
         </ion-card-content>
       </ion-card>
     </div>
   </div>
 </ion-content>
+

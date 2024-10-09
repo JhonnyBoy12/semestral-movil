@@ -14,25 +14,27 @@ export class AppComponent {
 
   constructor(private router:Router, private alertContorller:AlertController,
     private toastController: ToastController, private storage: NativeStorage) {
-      // Función para verificar si hay un usuario guardado
-    this.storage.getItem('usuario').then(
-      data => {
-        // Si hay datos del usuario, redirigir a home
-        if (data) {
-          this.nombreUsuario = data.nombre_usuario; // Cargar el nombre de usuario
-          this.router.navigate(['/home']);
-        } else {
-          // Si no hay datos, redirigir a iniciar
-          this.router.navigate(['/iniciar']);
-        }
-      },
-      error => {
-        // Manejo de errores al recuperar el usuario
-        console.log('No hay usuario en el almacenamiento nativo.');
+    
+  }
+  ngOnit(){
+  // Función para verificar si hay un usuario guardado
+  this.storage.getItem('usuario').then(
+    data => {
+      // Si hay datos del usuario, redirigir a home
+      if (data) {
+        this.nombreUsuario = data.nombre_usuario; // Cargar el nombre de usuario
+        this.router.navigate(['/home']);
+      } else {
+        // Si no hay datos, redirigir a iniciar
         this.router.navigate(['/iniciar']);
       }
-    );
-    
+    },
+    error => {
+      // Manejo de errores al recuperar el usuario
+      console.log('No hay usuario en el almacenamiento nativo.');
+      this.router.navigate(['/iniciar']);
+    }
+  );    
   }
 
     //ALERTA TOAST
@@ -46,11 +48,14 @@ export class AppComponent {
     await toast.present();
   }
 
-  cerrarsesion(){
-    //Al cerrar sesion limpia LOCAL
-    localStorage.clear();
-
-    this.presentToast('bottom');
-    this.router.navigate(['/iniciar']);
+  async cerrarsesion() {
+    try {
+      await this.storage.remove('usuario'); // Elimina solo el usuario
+      this.presentToast('bottom');
+      this.router.navigate(['/iniciar']); // Redirige a iniciar sesión
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      this.presentToast('bottom'); // Muestra un toast de error si es necesario
+    }
   }
 }
