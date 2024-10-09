@@ -12,10 +12,12 @@ export class RegistrarPage implements OnInit {
 
   nombreUsuario:string="";
   email:string="";
-  telefono?: number;
+  telefono: string="";
   contra:string="";
   confirmarContra:string=""; // Nueva variable para confirmar la contraseña
   id_rol: number=2;
+
+  
 
   constructor(private router:Router, private alertController:AlertController,
     private toastController: ToastController, private bd: ServicebdService) { }
@@ -34,12 +36,6 @@ export class RegistrarPage implements OnInit {
     if (!pattern.test(inputChar)) {
       event.preventDefault();
     }
-  }
-
-  // Función para validar teléfono
-  validarTelefono(telefono: number): boolean {
-    const validarTe = /^[0-9]{8}$/; // Se requiere exactamente 9 dígitos
-    return validarTe.test(String(telefono));
   }
 
   // Función para validar contraseña
@@ -98,11 +94,10 @@ export class RegistrarPage implements OnInit {
       return;
     }
 
-    if (!this.validarTelefono(this.telefono)) {
-      this.presentAlert('Por favor ingrese un número de teléfono válido de los 8 dígitos restantes.');
+    if (this.telefono.length !== 8) {
+      this.presentAlert('Por favor ingrese un número de teléfono válido de 8 dígitos.');
       return;
     }
-
     // Validación de contraseña
     if (!this.contra) {
       this.presentAlert('Por favor ingrese una contraseña.');
@@ -119,8 +114,10 @@ export class RegistrarPage implements OnInit {
       this.presentAlert('Las contraseñas no coinciden.');
       return;
     }
+    // Convertir el teléfono a número antes de llamar a la BD
+    
 
-    this.bd.ingresarUsuario(this.nombreUsuario, this.email, this.telefono, this.contra, this.id_rol);
+    this.bd.ingresarUsuario(this.nombreUsuario, this.email, this.contra, this.id_rol, this.telefono);
     this.presentToast('bottom');
     this.router.navigate(['/iniciar']);
   }

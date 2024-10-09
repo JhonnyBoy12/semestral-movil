@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 
@@ -16,7 +17,7 @@ export class IniciarPage implements OnInit {
 
 
   constructor(private router:Router, private alertController: AlertController,private activedroute: ActivatedRoute,
-    private toastController: ToastController, private bd: ServicebdService) { 
+    private toastController: ToastController, private bd: ServicebdService, private storage: NativeStorage) { 
   
   }
 
@@ -63,17 +64,28 @@ export class IniciarPage implements OnInit {
     }
 
     const usuario = await this.bd.validarUsuario(this.email, this.contra);
-    if (usuario){
-      //si encuentra el usuario accede a la interfaz
-      if (usuario.id_rol === 1 ){ /// es el id del admin de la base de datos
-        this.router.navigate(['/home-admin']);
-        this.presentToast('bottom',"administrador");
-      } else {
-        this.router.navigate(['/home']); ///rol usuario
-        this.presentToast('bottom',"usuario");
-      }
-    }else{
-      this.presentAlert('Correo electrónico o contraseña invalida.');
+
+    if (usuario) {
+      // Guardar los datos del usuario en NativeStorage
+      this.storage.setItem('usuario', {
+        id_usuario: usuario.id_usuario,
+        nombre_usuario: usuario.nombre_usuario,
+        id_rol: usuario.id_rol
+      }).then(
+        () => {
+          // Si encuentra el usuario, accede a la interfaz
+          if (usuario.id_rol === 1) { /// es el id del admin de la base de datos
+            this.router.navigate(['/home-admin']);
+            this.presentToast('bottom', "administrador");
+          } else {
+            this.router.navigate(['/home']); ///rol usuario
+            this.presentToast('bottom', "usuario");
+          }
+        },
+        error => this.presentAlert('Error al guardar el usuario en el almacenamiento nativo.')
+      );
+    } else {
+      this.presentAlert('Correo electrónico o contraseña inválida.');
     }
   }
 

@@ -3,6 +3,8 @@ import { SQLiteObject, SQLite } from '@awesome-cordova-plugins/sqlite/ngx';
 import { AlertController, Platform } from '@ionic/angular';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Usuario } from '../models/usuario';
+import { Publicacion } from '../models/publicacion';
+import { Ubicacion } from '../models/ubicacion';
 
 @Injectable({
   providedIn: 'root'
@@ -36,11 +38,11 @@ export class ServicebdService {
   publicacionGuardada: string = "CREATE TABLE IF NOT EXISTS publicaciones_guardadas(id_guardado INTEGER PRIMARY KEY AUTOINCREMENT, id_usuario INTEGER NOT NULL, id_publicacion INTEGER NOT NULL, FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario), FOREIGN KEY (id_publicacion) REFERENCES publicaciones (id_publicacion));";
 
 
-  ////INSERT TABLAS ROL
+  ////INSERTS TABLA ROL
   rolAdmin: string = "INSERT or IGNORE INTO usuarios(id_rol, nombre_rol ) VALUES (1, 'Administrador')";
   rolUsuario: string = "INSERT or IGNORE INTO usuarios(id_rol, nombre_rol ) VALUES (2, 'Usuario')";
 
-  ////INSERT TABLAS COMUNAS
+  ////INSERTS TABLA COMUNAS
   comunaSantiago: string = "INSERT OR IGNORE INTO comunas(nombre_comuna) VALUES ('Santiago')";
   comunaProvidencia: string = "INSERT OR IGNORE INTO comunas(nombre_comuna) VALUES ('Providencia')";
   comunaLasCondes: string = "INSERT OR IGNORE INTO comunas(nombre_comuna) VALUES ('Las Condes')";
@@ -54,7 +56,7 @@ export class ServicebdService {
   comunaEstacionCentral: string = "INSERT OR IGNORE INTO comunas(nombre_comuna) VALUES ('Estación Central')";
   comunaIndependencia: string = "INSERT OR IGNORE INTO comunas(nombre_comuna) VALUES ('Independencia')";
 
-  ////INSERT TABLAS ESTABLECIMIENTOS
+  ////INSERTS TABLA ESTABLECIMIENTOS
   establecimientoVeterinaria: string = "INSERT OR IGNORE INTO establecimientos(tipo_establecimiento) VALUES ('Veterinaria')";
   establecimientoRescate: string = "INSERT OR IGNORE INTO establecimientos(tipo_establecimiento) VALUES ('Centro de rescate')";
   establecimientoEstilista: string = "INSERT OR IGNORE INTO establecimientos(tipo_establecimiento) VALUES ('Estilista')";
@@ -64,21 +66,21 @@ export class ServicebdService {
   establecimientoFarmacia: string = "INSERT OR IGNORE INTO establecimientos(tipo_establecimiento) VALUES ('Farmacia para animales')";
   establecimientoServiciosAdopcion: string = "INSERT OR IGNORE INTO establecimientos(tipo_establecimiento) VALUES ('Servicios de adopción')";
 
-  ////INSERT TABLAS CATEGORIAS
+  ////INSERTS TABLA CATEGORIAS
   categoriaPerros: string = "INSERT OR IGNORE INTO categorias(nombre_categoria) VALUES ('Perros')";
   categoriaGatos: string = "INSERT OR IGNORE INTO categorias(nombre_categoria) VALUES ('Gatos')";
   categoriaPerrosYGatos: string = "INSERT OR IGNORE INTO categorias(nombre_categoria) VALUES ('Perros y Gatos')";
   categoriaRoedores: string = "INSERT OR IGNORE INTO categorias(nombre_categoria) VALUES ('Roedores')";
   categoriaOtros: string = "INSERT OR IGNORE INTO categorias(nombre_categoria) VALUES ('Otros')";
 
-  ////insert tablas especies
+  ////INSERTS TABLA ESPECIES
   especiePerros: string = "INSERT OR IGNORE INTO especies(nombre_especie) VALUES ('Perros')";
   especieGatos: string = "INSERT OR IGNORE INTO especies(nombre_especie) VALUES ('Gatos')";
   especiePerrosGatos: string = "INSERT OR IGNORE INTO especies(nombre_especie) VALUES ('Perros y Gatos')";
   especieAves: string = "INSERT OR IGNORE INTO especies(nombre_especie) VALUES ('Aves')";
   especiePeces: string = "INSERT OR IGNORE INTO especies(nombre_especie) VALUES ('Peces')";
   especieReptiles: string = "INSERT OR IGNORE INTO especies(nombre_especie) VALUES ('Reptiles')";
-  //// INSERT TABLAS SERVICIOS
+  //// INSERTS TABLA SERVICIOS
 
   servicioConsultaMedica: string = "INSERT OR IGNORE INTO servicios(nombre_servicio) VALUES ('Consulta médica')";
   servicioCirugia: string = "INSERT OR IGNORE INTO servicios(nombre_servicio) VALUES ('Cirugía')";
@@ -92,26 +94,45 @@ export class ServicebdService {
 
   ////////////////////////////
 
-
+  ////===OBSERVABLES Y GUARDADOS TABLA "USUARIOS"///////////////
   
-  //variables para guardar los registros de un select a tablas
+  //variable de guardado SELECT
   listadoUsuarios = new BehaviorSubject([]);
 
-  /////////////////////////////////////////
-
-
-
-  //OBSERVABLE FUNCIONES
+  //Observable
   fetchUsuarios(): Observable<Usuario[]>{
     return this.listadoUsuarios.asObservable();
   }
+  ////////////////////////////////////////////////////////////
 
-  dbState(){
-    return this.isDBReady.asObservable();
+
+  ////===OBSERVABLES Y GUARDADOS TABLA "PUBLICACIONES"///////////////
+  
+  //variable de guardado SELECT
+  listadoPublicaciones = new BehaviorSubject([]);
+
+  //Observable
+  fetchPublicaciones(): Observable<Publicacion[]>{
+    return this.listadoPublicaciones.asObservable();
   }
   ////////////////////////////////////////////////////////////
   
+
+  ////===OBSERVABLES Y GUARDADOS TABLA "UBICACIONES"///////////////
   
+  //variable de guardado SELECT
+  listadoUbicaciones = new BehaviorSubject([]);
+
+  //Observable
+  fetchUbicaciones(): Observable<Ubicacion[]>{
+    return this.listadoUbicaciones.asObservable();
+  }
+  ////////////////////////////////////////////////////////////
+  
+  dbState(){
+    return this.isDBReady.asObservable();
+  }
+
   //VARIABLE DE MANIPULACION DE BASE DE DATOS
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -170,7 +191,8 @@ export class ServicebdService {
       await this.database.executeSql(this.publicacion, []);
       await this.database.executeSql(this.publicacionGuardada, []);
 
-      //GENERACION DE INSERTS EN TABLAS REQUERIDAS
+      ///---GENERACION DE INSERTS EN TABLAS REQUERIDAS---///
+
       // Insert para la tabla de roles
       await this.database.executeSql(this.rolAdmin, []);
       await this.database.executeSql(this.rolUsuario, []);
@@ -230,8 +252,7 @@ export class ServicebdService {
     }
   }
 
-
-  /////FUNCIONES USUARIOS
+  /////CONSULTA COMPLETA USUARIO + INSERCCION ListadoUsuarios
     consultarUsuarios(){
       return this.database.executeSql('SELECT * FROM usuarios',[]).then(res=>{
         //variable para almacenar el resultado de la consulta
@@ -254,9 +275,72 @@ export class ServicebdService {
         this.listadoUsuarios.next(items as any);
       })
     }
+  /////////////////////////////
 
-    ingresarUsuario(nombreUsuario:String, email: String, telefono: Number, contra:String, id_rol:number){
-      return this.database.executeSql('INSERT INTO usuarios(nombreUsuario,email, telefono,contra,id_rol) VALUES (?,?,?,?,?,?)',[nombreUsuario,email,telefono,contra,id_rol]).then(res=>{
+  /////CONSULTA COMPLETA USUARIO + INSERCCION ListadoPublicaciones
+  consultarPublicaciones(){
+    return this.database.executeSql('SELECT * FROM publicaciones',[]).then(res=>{
+      //variable para almacenar el resultado de la consulta
+      let items: Publicacion[] = [];
+      //verificar si tenemos registros en la consulta
+      if(res.rows.length > 0){
+        //recorro el resultado
+        for(var i = 0; i < res.rows.length; i++){
+          //agregar el registro a mi variable
+          items.push({
+            id_publicacion: res.rows.item(i).id_publicacion,
+            id_usuario: res.rows.item(i).id_usuario,
+            titulo: res.rows.item(i).titulo,
+            foto: res.rows.item(i).foto,
+            descripcion: res.rows.item(i).descripcion,
+            fecha_publicacion: res.rows.item(i).fecha_publicacion,
+            fecha_baneo: res.rows.item(i).fecha_baneo,
+            publicacion_adopcion: false,
+            id_categoria: res.rows.item(i).id_categoria
+          })
+        }
+      }
+      this.listadoPublicaciones.next(items as any);
+    })
+  }
+  /////////////////////////////
+
+  /////CONSULTA COMPLETA USUARIO + INSERCCION ListadoPublicaciones
+  consultarUbicaciones(){
+    return this.database.executeSql('SELECT * FROM publicaciones',[]).then(res=>{
+      //variable para almacenar el resultado de la consulta
+      let items: Ubicacion[] = [];
+      //verificar si tenemos registros en la consulta
+      if(res.rows.length > 0){
+        //recorro el resultado
+        for(var i = 0; i < res.rows.length; i++){
+          //agregar el registro a mi variable
+          items.push({
+            id_ubicacion: res.rows.item(i).id_publicacion,
+            nombre_ubicacion: res.rows.item(i).nombre_ubicacion,
+            direccion: res.rows.item(i).direccion,
+            sububicacion: res.rows.item(i).sububicacion,
+            descripcion_ubicacion: res.rows.item(i).descripcion_ubicacion,
+            horario: res.rows.item(i).horario,
+            imagen_ubicacion: res.rows.item(i).imagen_ubicacion,
+            telefono_lugar: res.rows.item(i).telefono_lugar,
+            id_administrador: res.rows.item(i).id_administrador,
+            id_comuna: res.rows.item(i).id_comuna,
+            latitud: res.rows.item(i).latitud,
+            longitud: res.rows.item(i).longitud,
+            tipo_marcador: res.rows.item(i).marcador,
+            visibilidad: true
+          })
+        }
+      }
+      this.listadoUbicaciones.next(items as any);
+    })
+  }
+  /////////////////////////////
+
+  //INGRESO DE USUARIO (REGISTRAR USUARIO)
+    ingresarUsuario(nombreUsuario:String, email: String, contra:String, id_rol:number, telefono: String){
+      return this.database.executeSql('INSERT INTO usuarios(nombre_usuario,correo_usuario,contrasena_usuario,id_rol,telefono) VALUES (?,?,?,?,?)',[nombreUsuario,email,contra,id_rol,telefono]).then(res=>{
         this.presentAlert("Ingresar", "Usuario Registrado");
         this.consultarUsuarios();
       }).catch(e=>{
@@ -264,9 +348,8 @@ export class ServicebdService {
       })
     }
 
-
-
-    modificarContraUsuario(id_usuario:number, contrasena_usuario:string){
+  //FUNCIONES MOFIFICACION USUARIO BD
+  modificarContraUsuario(id_usuario:number, contrasena_usuario:string){
       return this.database.executeSql('UPDATE usuarios SET contrasena_usuario = ? WHERE id_usuario = ?',[id_usuario,contrasena_usuario]).then(res=>{
         this.presentAlert("Modificar", "Contraseña Modificada");
         this.consultarUsuarios();
@@ -274,7 +357,7 @@ export class ServicebdService {
         this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
       }) 
   }
-    modificarNombreUsuario(id_usuario:number, nombre_usuario:string){
+  modificarNombreUsuario(id_usuario:number, nombre_usuario:string){
     return this.database.executeSql('UPDATE usuarios SET nombre_usuario = ? WHERE id_usuario = ?',[id_usuario,nombre_usuario]).then(res=>{
       this.presentAlert("Modificar", "Nombre de Usuario Modificado");
       this.consultarUsuarios();
@@ -304,4 +387,24 @@ export class ServicebdService {
  
   }
 
+
+  // Añade esta función en tu servicio
+  agregarPublicacion(publicacion: {id_usuario: number; titulo: string;foto: string; descripcion: string;fecha_publicacion: Date;
+    publicacion_adopcion: boolean;id_categoria: number;
+  }): Promise<void> {
+    
+    const { id_usuario, titulo, foto, descripcion, fecha_publicacion, publicacion_adopcion, id_categoria } = publicacion;
+
+    return this.database.executeSql(
+      'INSERT INTO publicaciones (id_usuario, titulo, foto, descripcion, fecha_publicacion, publicacion_adopcion, id_categoria) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+      [id_usuario, titulo, foto, descripcion, fecha_publicacion, publicacion_adopcion, id_categoria]
+    ).then(() => {
+      this.presentAlert('Realizado','Publicacion hecha correctamente');
+    }).catch(e => {
+      this.presentAlert('Error al añadir la publicación', "Error"+JSON.stringify(e));
+    });
+  }
+
 }
+
+  

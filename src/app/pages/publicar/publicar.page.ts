@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-publicar',
@@ -13,10 +15,25 @@ export class PublicarPage implements OnInit {
   descripcion: string = '';
   imagePreview: string | ArrayBuffer | null = null;
 
+  id_categoria: number = 0; 
+
+  id_usuario: number = 0; // Este valor lo tomarás del usuario en sesión
+  publicacion_adopcion: boolean = false;
+
   constructor(private router:Router, private alertController:AlertController,
-    private toastController: ToastController) { }
+    private toastController: ToastController, private bd:ServicebdService, private storage:NativeStorage) { }
 
   ngOnInit() {
+    // Obtén el id del usuario desde NativeStorage
+    this.storage.getItem('usuario').then(data => {
+      if (data) {
+        this.id_usuario = data.id_usuario; // Asigna el ID del usuario
+      } else {
+        console.error('No se encontró el usuario en NativeStorage');
+      }
+    }).catch(error => {
+      console.error('Error al obtener el usuario de NativeStorage:', error);
+    });
   }
 
   eleccionImagen(event: any) {
@@ -51,7 +68,7 @@ export class PublicarPage implements OnInit {
     await toast.present();
   }
 
-  publicar(){
+  async publicar(){
     if (!this.titulo) {
       this.presentAlert('Por favor ingrese un Titulo a la publicacion');
       return;
@@ -66,18 +83,29 @@ export class PublicarPage implements OnInit {
       this.presentAlert('Por favor ingrese una descripcion a la publicacion');
       return;
     }
+    // Preparamos los datos para la publicación
+    const publicacion = {
+      id_usuario: this.id_usuario,
+      titulo: this.titulo,
+      foto: this.imagePreview as string,  
+      descripcion: this.descripcion,
+      fecha_publicacion: new Date(), 
+      publicacion_adopcion: this.publicacion_adopcion,
+      id_categoria: this.id_categoria,
+    };
 
-    let context: NavigationExtras = {
-      state:{
-        titulo:this.titulo,
-        descripcion:this.descripcion,
-        imagen:this.imagePreview,
-      
-      }
+    try {
+      // Llamamos al servicio para agregar la publicación
+      await this.bd.agregarPublicacion(publicacion);
+      this.presentToast('bottom');
+      this.router.navigate(['/foro']); // Redirigimos al foro después de publicar
+    } catch (error) {
+      this.presentAlert('Error al publicar la publicación, intente nuevamente.'); // Manejamos el error
     }
 
+    
     this.presentToast('bottom');
-    this.router.navigate(['/foro'],context);
+    this.router.navigate(['/foro']);
 
   }
 

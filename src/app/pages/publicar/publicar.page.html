@@ -30,6 +30,19 @@
       [(ngModel)]="descripcion"></ion-textarea>
       <ion-note slot="end">{{descripcion.length}}/100</ion-note>
     </ion-item>
+
+    <!-- ion-select para la categoría -->
+    <ion-item>
+      <ion-label>Categoría</ion-label>
+      <ion-select [(ngModel)]="id_categoria" placeholder="Seleccione una categoría">
+        <ion-select-option value="1">Perros</ion-select-option>
+        <ion-select-option value="2">Gatos</ion-select-option>
+        <ion-select-option value="3">Perros y Gatos</ion-select-option>
+        <ion-select-option value="4">Roedores</ion-select-option>
+        <ion-select-option value="5">Otros</ion-select-option>
+      </ion-select>
+    </ion-item>
+    
   </div>
 
   <div class="division">
