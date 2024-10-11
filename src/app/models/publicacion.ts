@@ -9,6 +9,7 @@ export class Publicacion {
     descripcion_baneo?: string;
     publicacion_adopcion!: boolean;
     id_categoria!: number;
+    telefono_usuario!: string; // Añadir este campo
   
     constructor(
       id_publicacion: number,
@@ -19,6 +20,7 @@ export class Publicacion {
       fecha_publicacion: Date,
       publicacion_adopcion: boolean,
       id_categoria: number,
+      telefono_usuario: string, 
       fecha_baneo?: Date,
       descripcion_baneo?: string
     ) {
@@ -30,6 +32,7 @@ export class Publicacion {
       this.fecha_publicacion = fecha_publicacion;
       this.publicacion_adopcion = publicacion_adopcion;
       this.id_categoria = id_categoria;
+      this.telefono_usuario = telefono_usuario; 
       this.fecha_baneo = fecha_baneo;
       this.descripcion_baneo = descripcion_baneo;
     }

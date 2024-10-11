@@ -10,28 +10,25 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class ForoPage implements OnInit {
 
-  foro: any = [
-    {
-      nombreUsuario:'',
-      titulo: '',
-      foto: '',
-      descripcion: ''
-    }
-  ]
+  publicaciones: any[] =[];
 
   constructor(private toastController: ToastController, private alertController: AlertController,
   public popoverController: PopoverController, private bd:ServicebdService) { }
 
   ngOnInit() {
-     //verifico si la BD esta disponible
-     this.bd.dbState().subscribe(data=>{
-      if(data){
-        //subscribir al observable de la consulta
-        this.bd.fetchUsuarios().subscribe(res=>{ ////cambiar fetch
-          this.foro = res;
-        })
+    this.cargarPublicaciones();
+  }
+
+  cargarPublicaciones() {
+    this.bd.dbState().subscribe(data => {
+      if (data) {
+        this.bd.consultarPublicaciones().then(res => {
+          this.publicaciones = res; // Asignamos los resultados a publicaciones
+        }).catch(error => {
+          console.error("Error al cargar las publicaciones:", error);
+        });
       }
-    })
+    });
   }
 
   async contactar(ev: any) {

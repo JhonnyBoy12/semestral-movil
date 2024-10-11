@@ -5,11 +5,15 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Usuario } from '../models/usuario';
 import { Publicacion } from '../models/publicacion';
 import { Ubicacion } from '../models/ubicacion';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServicebdService {
+
+  private usuarioSesionSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+  public usuarioSesion$ = this.usuarioSesionSubject.asObservable();
 
   //CONEXION BASE DE DATOS
   public database!: SQLiteObject;
@@ -92,12 +96,15 @@ export class ServicebdService {
   servicioGuarderia: string = "INSERT OR IGNORE INTO servicios(nombre_servicio) VALUES ('Guardería o cuidado temporal')";
   servicioDomicilio: string = "INSERT OR IGNORE INTO servicios(nombre_servicio) VALUES ('Servicio a domicilio')";
 
+
+  //SUPER ADMIN
+  superAdmin: string = "INSERT OR IGNORE INTO administrador (id_rol, nombre, correo_electronico, contrasena, telefono) VALUES (1, 'SuperAdmin', 'admin@gmail.com', 'Admin.12345', '1234567890')";
   ////////////////////////////
 
   ////===OBSERVABLES Y GUARDADOS TABLA "USUARIOS"///////////////
   
   //variable de guardado SELECT
-  listadoUsuarios = new BehaviorSubject([]);
+  listadoUsuarios = new BehaviorSubject<Usuario[]>([]);
 
   //Observable
   fetchUsuarios(): Observable<Usuario[]>{
@@ -137,7 +144,7 @@ export class ServicebdService {
   private isDBReady: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
 
-  constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController) {
+  constructor(private sqlite: SQLite, private platform: Platform, private alertController: AlertController, private storage: NativeStorage) {
     this.crearBD();
    }
 
@@ -166,8 +173,8 @@ export class ServicebdService {
         //CREACION ORDEN TABLAS
         this.crearTablas();
         //FUNCIONES POR DEFECTO AL CREAR CONECTAR
-        this.consultarUsuarios();
-
+        this.consultarPublicaciones();
+        this.consultarPublicaciones();
         //MODIFICACION OBSERVABLE DEL STATUS DE BASE DE DATOS
         this.isDBReady.next(true);
       }).catch(e=>{
@@ -246,77 +253,101 @@ export class ServicebdService {
       await this.database.executeSql(this.servicioCuidadoDental, []);
       await this.database.executeSql(this.servicioGuarderia, []);
       await this.database.executeSql(this.servicioDomicilio, []);
-        
+      
+      // Insert para el administrador SuperAdmin
+      await this.database.executeSql(this.superAdmin, []);
+
     }catch(e){
       this.presentAlert("Creación de Tabla", "Error creando las Tablas: " + JSON.stringify(e));
     }
   }
 
   /////CONSULTA COMPLETA USUARIO + INSERCCION ListadoUsuarios
-    consultarUsuarios(){
-      return this.database.executeSql('SELECT * FROM usuarios',[]).then(res=>{
-        //variable para almacenar el resultado de la consulta
-        let items: Usuario[] = [];
-        //verificar si tenemos registros en la consulta
-        if(res.rows.length > 0){
-          //recorro el resultado
-          for(var i = 0; i < res.rows.length; i++){
-            //agregar el registro a mi variable
-            items.push({
-              id_usuario: res.rows.item(i).id_usuario,
-              nombre_usuario: res.rows.item(i).nombre_usuario,
-              correo_usuario: res.rows.item(i).correo_usuario,
-              contrasena_usuario: res.rows.item(i).contrasena_usuario,
-              id_rol: res.rows.item(i).id_rol,
-              telefono: res.rows.item(i).telefono
-            });
-          }
+  consultarUsuarioActivo(id_usuario: number): void {
+    const query = 'SELECT nombre_usuario, correo_usuario, telefono, foto, contrasena_usuario, id_rol FROM usuarios WHERE id_usuario = ?';
+
+    this.database.executeSql(query, [id_usuario])
+      .then(res => {
+        if (res.rows.length > 0) {
+          const usuarioActivo: Usuario = {
+            id_usuario: id_usuario,
+            nombre_usuario: res.rows.item(0).nombre_usuario,
+            correo_usuario: res.rows.item(0).correo_usuario,
+            contrasena_usuario: res.rows.item(0).contrasena_usuario || '', // Valor por defecto
+            id_rol: res.rows.item(0).id_rol || 0, // Valor por defecto
+            telefono: res.rows.item(0).telefono,
+            foto: res.rows.item(0).foto || 'assets/icon/perfil.jpg',
+          };
+
+          // Emitir el usuario activo en el observable
+          this.listadoUsuarios.next([usuarioActivo]); // Emitimos un array con el usuario encontrado
+        } else {
+          console.warn('No se encontró el usuario activo con ID:', id_usuario);
+          // Emitir un array vacío si no se encuentra el usuario
+          this.listadoUsuarios.next([]);
         }
-        this.listadoUsuarios.next(items as any);
       })
-    }
+      .catch(e => {
+        console.error('Error al consultar usuario activo:', e);
+        this.presentAlert("Consultar Usuario Activo", "Error: " + JSON.stringify(e));
+      });
+  }
+
+  
+
   /////////////////////////////
 
-  /////CONSULTA COMPLETA USUARIO + INSERCCION ListadoPublicaciones
-  consultarPublicaciones(){
-    return this.database.executeSql('SELECT * FROM publicaciones',[]).then(res=>{
-      //variable para almacenar el resultado de la consulta
-      let items: Publicacion[] = [];
-      //verificar si tenemos registros en la consulta
-      if(res.rows.length > 0){
-        //recorro el resultado
-        for(var i = 0; i < res.rows.length; i++){
-          //agregar el registro a mi variable
+  async iniciarSesion(usuario: any) {
+    await this.storage.setItem('usuario_sesion', usuario);
+    this.usuarioSesionSubject.next(usuario);
+  }
+
+  /////CONSULTA COMPLETA PUBLICACIONES + INSERCCION ListadoPublicaciones
+  consultarPublicaciones(): Promise<any[]> {
+    const query = `
+      SELECT p.id_publicacion, p.titulo, p.foto, p.descripcion, p.fecha_publicacion, 
+             u.nombre_usuario, u.telefono, u.foto AS foto_perfil, 
+             c.nombre_categoria AS categoria
+      FROM publicaciones p 
+      JOIN usuarios u ON p.id_usuario = u.id_usuario
+      JOIN categorias c ON p.id_categoria = c.id_categoria
+    `;
+    
+    return this.database.executeSql(query, []).then(res => {
+      let items: any[] = [];
+      if (res.rows.length > 0) {
+        for (let i = 0; i < res.rows.length; i++) {
           items.push({
             id_publicacion: res.rows.item(i).id_publicacion,
-            id_usuario: res.rows.item(i).id_usuario,
             titulo: res.rows.item(i).titulo,
             foto: res.rows.item(i).foto,
             descripcion: res.rows.item(i).descripcion,
-            fecha_publicacion: res.rows.item(i).fecha_publicacion,
-            fecha_baneo: res.rows.item(i).fecha_baneo,
-            publicacion_adopcion: false,
-            id_categoria: res.rows.item(i).id_categoria
-          })
+            nombre_usuario: res.rows.item(i).nombre_usuario,
+            foto_perfil: res.rows.item(i).foto_perfil,
+            telefono: res.rows.item(i).telefono,
+            categoria: res.rows.item(i).categoria  // Ahora es correcto
+          });
         }
       }
-      this.listadoPublicaciones.next(items as any);
-    })
+      return items;
+    }).catch(e => {
+      this.presentAlert("Consultar PUBLICACIONES vista foro", "Error: " + JSON.stringify(e));
+      throw e;  // Lanza el error para que pueda ser capturado en `cargarPublicaciones()`
+    });
   }
+  
+  
   /////////////////////////////
 
-  /////CONSULTA COMPLETA USUARIO + INSERCCION ListadoPublicaciones
-  consultarUbicaciones(){
-    return this.database.executeSql('SELECT * FROM publicaciones',[]).then(res=>{
-      //variable para almacenar el resultado de la consulta
+  /////CONSULTA COMPLETA UBICACIONES + INSERCCION ListadoPublicaciones
+  consultarUbicaciones() {
+    const query = 'SELECT * FROM ubicaciones';
+    return this.database.executeSql(query, []).then(res => {
       let items: Ubicacion[] = [];
-      //verificar si tenemos registros en la consulta
-      if(res.rows.length > 0){
-        //recorro el resultado
-        for(var i = 0; i < res.rows.length; i++){
-          //agregar el registro a mi variable
+      if (res.rows.length > 0) {
+        for (let i = 0; i < res.rows.length; i++) {
           items.push({
-            id_ubicacion: res.rows.item(i).id_publicacion,
+            id_ubicacion: res.rows.item(i).id_ubicacion,
             nombre_ubicacion: res.rows.item(i).nombre_ubicacion,
             direccion: res.rows.item(i).direccion,
             sububicacion: res.rows.item(i).sububicacion,
@@ -328,13 +359,15 @@ export class ServicebdService {
             id_comuna: res.rows.item(i).id_comuna,
             latitud: res.rows.item(i).latitud,
             longitud: res.rows.item(i).longitud,
-            tipo_marcador: res.rows.item(i).marcador,
-            visibilidad: true
-          })
+            tipo_marcador: res.rows.item(i).tipo_marcador,
+            visibilidad: res.rows.item(i).visibilidad
+          });
         }
       }
       this.listadoUbicaciones.next(items as any);
-    })
+    }).catch(e => {
+      console.error('Error al consultar ubicaciones', e);
+    });
   }
   /////////////////////////////
   
@@ -344,62 +377,85 @@ export class ServicebdService {
     return this.database.executeSql(query, [nombreUsuario, email, contra, id_rol, telefono])
         .then(() => console.log('Usuario registrado correctamente'))
         .catch(e => console.error('Error al registrar el usuario', e));
-}
-
-  //FUNCIONES MOFIFICACION USUARIO BD
-  modificarContraUsuario(id_usuario:number, contrasena_usuario:string){
-      return this.database.executeSql('UPDATE usuarios SET contrasena_usuario = ? WHERE id_usuario = ?',[id_usuario,contrasena_usuario]).then(res=>{
-        this.presentAlert("Modificar", "Contraseña Modificada");
-        this.consultarUsuarios();
-      }).catch(e=>{
-        this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
-      }) 
-  }
-  modificarNombreUsuario(id_usuario:number, nombre_usuario:string){
-    return this.database.executeSql('UPDATE usuarios SET nombre_usuario = ? WHERE id_usuario = ?',[id_usuario,nombre_usuario]).then(res=>{
-      this.presentAlert("Modificar", "Nombre de Usuario Modificado");
-      this.consultarUsuarios();
-    }).catch(e=>{
-      this.presentAlert("Modificar", "Error: " + JSON.stringify(e));
-    }) 
   }
 
-  //METODO INICIAR SESION
+  //ACTUALIZAR FOTO USUARIO
+  actualizarFotoUsuario(id_usuario: number, foto: string) {
+    const query = `UPDATE usuarios SET foto = ? WHERE id_usuario = ?`;
+    return this.database.executeSql(query, [foto, id_usuario])
+      .then(() => console.log('Foto actualizada correctamente'))
+      .catch(e => console.error('Error al actualizar la foto', e));
+  }
+
+  
+
+  //METODOS INICIAR SESION
+  // Método para validar el usuario e iniciar sesión
   async validarUsuario(email: string, contra: string) {
     const query = `SELECT id_usuario, nombre_usuario, id_rol,
-                   CASE 
-                     WHEN id_rol = 1 THEN 'Administrador' 
-                     WHEN id_rol = 2 THEN 'Usuario' 
-                   END AS nombre_rol 
-                   FROM usuarios WHERE correo_usuario = ? AND contrasena_usuario = ?`;
+                  CASE 
+                    WHEN id_rol = 1 THEN 'Administrador' 
+                    WHEN id_rol = 2 THEN 'Usuario' 
+                  END AS nombre_rol 
+                  FROM usuarios WHERE correo_usuario = ? AND contrasena_usuario = ?`;
     
     const result = await this.database.executeSql(query, [email, contra]);
     
     if (result.rows.length > 0) {
-        return result.rows.item(0); // Retorna el usuario encontrado
+        const usuario = result.rows.item(0);
+        
+        // Guarda los datos del usuario en el almacenamiento nativo
+        await this.storage.setItem('usuario_sesion', {
+          id_usuario: usuario.id_usuario,
+          nombre_usuario: usuario.nombre_usuario,
+          id_rol: usuario.id_rol
+        });
+
+        return usuario;
     } else {
         return null; // Usuario no encontrado
     }
-}
-
-
-  // Añade esta función en tu servicio
-  agregarPublicacion(publicacion: {id_usuario: number; titulo: string;foto: string; descripcion: string;fecha_publicacion: Date;
-    publicacion_adopcion: boolean;id_categoria: number;
-  }): Promise<void> {
-    
-    const { id_usuario, titulo, foto, descripcion, fecha_publicacion, publicacion_adopcion, id_categoria } = publicacion;
-
-    return this.database.executeSql(
-      'INSERT INTO publicaciones (id_usuario, titulo, foto, descripcion, fecha_publicacion, publicacion_adopcion, id_categoria) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-      [id_usuario, titulo, foto, descripcion, fecha_publicacion, publicacion_adopcion, id_categoria]
-    ).then(() => {
-      this.presentAlert('Realizado','Publicacion hecha correctamente');
-    }).catch(e => {
-      this.presentAlert('Error al añadir la publicación', "Error"+JSON.stringify(e));
-    });
   }
 
+  // Método para validar el administrador e iniciar sesión
+  async validarAdmin(email: string, contra: string) {
+    const query = `SELECT id_administrador, nombre, id_rol FROM administrador WHERE correo_electronico = ? AND contrasena = ?`;
+    
+    const result = await this.database.executeSql(query, [email, contra]);
+    
+    if (result.rows.length > 0) {
+        const admin = result.rows.item(0);
+        
+        // Guarda los datos del administrador en el almacenamiento nativo
+        await this.storage.setItem('usuario_sesion', {
+            id_usuario: admin.id_administrador,  // Usa id_administrador aquí
+            nombre_usuario: admin.nombre,
+            id_rol: admin.id_rol
+        });
+
+        return admin;
+    } else {
+        return null; // Administrador no encontrado
+    }
+  }
+  /////////////////////////////////////////
+
+    agregarPublicacion(publicacion: { id_usuario: number; titulo: string; foto: string; descripcion: string; fecha_publicacion: Date; publicacion_adopcion: boolean; id_categoria: number; }): Promise<void> {
+
+      const { id_usuario, titulo, foto, descripcion, publicacion_adopcion, id_categoria } = publicacion;
+      
+      return this.database.executeSql(
+        'INSERT INTO publicaciones (id_usuario, titulo, foto, descripcion, fecha_publicacion, publicacion_adopcion, id_categoria) VALUES (?, ?, ?, ?, ?, ?, ?)',
+        [id_usuario, titulo, foto, descripcion, new Date(), publicacion_adopcion, id_categoria]
+      )
+      .then(() => {
+        this.presentAlert('Realizado', 'Publicación hecha correctamente');
+      })
+      .catch(e => {
+        this.presentAlert('Error al añadir la publicación', `Error: ${JSON.stringify(e)}`);
+        return Promise.reject('Error al añadir la publicación'); // Propagar el error
+      });
+    }
 }
 
   

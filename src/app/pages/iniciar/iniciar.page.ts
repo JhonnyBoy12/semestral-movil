@@ -16,7 +16,6 @@ export class IniciarPage implements OnInit {
   constructor(
     private router: Router, 
     private alertController: AlertController,
-    private activedroute: ActivatedRoute,
     private toastController: ToastController, 
     private bd: ServicebdService, 
     private storage: NativeStorage
@@ -51,43 +50,50 @@ export class IniciarPage implements OnInit {
 
   async iniciar() {
     if (!this.email) {
-      this.presentAlert('Por favor ingrese su correo electrónico.');
-      return;
+        this.presentAlert('Por favor ingrese su correo electrónico.');
+        return;
     }
 
     if (!this.contra) {
-      this.presentAlert('Por favor ingrese su contraseña.');
-      return;
+        this.presentAlert('Por favor ingrese su contraseña.');
+        return;
     }
 
     if (!this.validarEmail(this.email)) {
-      this.presentAlert('Por favor ingrese un correo electrónico válido.');
-      return;
+        this.presentAlert('Por favor ingrese un correo electrónico válido.');
+        return;
     }
 
-    const usuario = await this.bd.validarUsuario(this.email, this.contra);
+    // Primero intenta validar al administrador
+    const admin = await this.bd.validarAdmin(this.email, this.contra);
+    if (admin) {
+        // Guarda los datos del administrador en el almacenamiento nativo
+        await this.storage.setItem('usuario_sesion', {
+            id_usuario: admin.id_administrador,  // Usa id_administrador
+            nombre_usuario: admin.nombre,
+            id_rol: admin.id_rol
+        });
 
-    if (usuario) {
-      // Guardar los datos del usuario en NativeStorage
-      this.storage.setItem('usuario', {
-        id_usuario: usuario.id_usuario,
-        nombre_usuario: usuario.nombre_usuario,
-        id_rol: usuario.id_rol
-      }).then(
-        () => {
-          // Si encuentra el usuario, accede a la interfaz
-          if (usuario.id_rol === 1) { // es el id del admin de la base de datos
-            this.router.navigate(['/home-admin']);
-            this.presentToast('bottom', "administrador");
-          } else {
-            this.router.navigate(['/home']); // rol usuario
-            this.presentToast('bottom', "usuario");
-          }
-        },
-        error => this.presentAlert('Error al guardar el usuario en el almacenamiento nativo.')
-      );
+        // Redirige a la página del administrador
+        this.router.navigate(['/home-admin']);
+        this.presentToast('bottom', "administrador");
     } else {
-      this.presentAlert('Correo electrónico o contraseña inválida.');
-    }
+        // Si no es administrador, intenta validar como usuario
+        const usuario = await this.bd.validarUsuario(this.email, this.contra);
+        if (usuario) {
+            // Guarda los datos del usuario en el almacenamiento nativo
+            await this.storage.setItem('usuario_sesion', {
+                id_usuario: usuario.id_usuario,
+                nombre_usuario: usuario.nombre_usuario,
+                id_rol: usuario.id_rol
+            });
+
+            // Redirige a la página del usuario
+            this.router.navigate(['/home']);
+            this.presentToast('bottom', "usuario");
+        } else {
+            this.presentAlert('Correo electrónico o contraseña inválida.');
+        }
+      }
   }
 }
