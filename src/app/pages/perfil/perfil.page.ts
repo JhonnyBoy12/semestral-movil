@@ -4,6 +4,7 @@ import { Usuario } from 'src/app/models/usuario';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-perfil',
@@ -32,32 +33,27 @@ export class PerfilPage implements OnInit {
     this.cargarDatosUsuario();
   }
 
-  cargarDatosUsuario() {
-    this.storage.getItem('usuario_sesion').then(data => {
+  async cargarDatosUsuario() {
+    try {
+      const data = await this.storage.getItem('usuario_sesion');
       if (data) {
         this.usuario.id_usuario = data.id_usuario;
         this.usuario.nombre_usuario = data.nombre_usuario || '';
         this.usuario.foto = data.foto || this.foto; // Imagen por defecto si no hay foto
   
         // Obtener detalles completos del usuario desde la BD
-        this.bd.fetchUsuarios().subscribe(
-          usuarios => {
-            const userLogueado = usuarios.find(us => us.id_usuario === this.usuario.id_usuario);
-            if (userLogueado) {
-              this.usuario = userLogueado; // Actualiza el usuario si se encuentra en la lista
-            } else {
-              // Si no se encuentra, llama a la función para consultar usuario activo
-              this.bd.consultarUsuarioActivo(this.usuario.id_usuario);
-            }
-          },
-          error => {
-            console.error('Error al recuperar lista de usuarios', error);
-          }
-        );
+        const usuarios = await firstValueFrom(this.bd.fetchUsuarios()); // Convertimos a Promise
+        const userLogueado = usuarios.find(us => us.id_usuario === this.usuario.id_usuario);
+        if (userLogueado) {
+          this.usuario = userLogueado; // Actualiza el usuario si se encuentra en la lista
+        } else {
+          // Si no se encuentra, llama a la función para consultar usuario activo
+          this.bd.consultarUsuarioActivo(this.usuario.id_usuario);
+        }
       }
-    }).catch(error => {
+    } catch (error) {
       console.error('Error al recuperar datos de usuario', error);
-    });
+    }
   }
   
 

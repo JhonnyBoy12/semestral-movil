@@ -21,9 +21,9 @@
       [(ngModel)]="titulo"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <input  type="file" (change)="eleccionImagen($event)" />
-    </ion-item>
+    <ion-button>
+      <input  (click)="takePicture()" />
+    </ion-button>
 
     <ion-item>
       <ion-textarea label="Descripción" labelPlacement="floating" placeholder="Máximo 100 caracteres" maxlength="100" 
@@ -54,8 +54,8 @@
   
   <div class="card-publicacion">
     <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
+      <img [src]="usuario?.foto || 'https://ionicframework.com/docs/demos/api/avatar/avatar.svg'" alt="Profile Picture" class="foto-perfil">
+      <span class="nombre">{{ usuario?.nombre_usuario || 'Nombre de Usuario' }}</span>
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
@@ -67,6 +67,10 @@
       <ion-card-content>
         {{ descripcion || 'Descripción de la publicación...' }}
       </ion-card-content>
+
+      <div class="categoria-circle">
+        {{ id_categoria ? getNombreCategoria(id_categoria) : 'Categoría no seleccionada' }}<!-- Usa un pipe para mostrar el nombre de la categoría -->
+      </div>
 
       <ion-row class="boton-accion">
         <ion-col>

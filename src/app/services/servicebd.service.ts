@@ -174,7 +174,7 @@ export class ServicebdService {
         this.crearTablas();
         //FUNCIONES POR DEFECTO AL CREAR CONECTAR
         this.consultarPublicaciones();
-        this.consultarPublicaciones();
+        this.consultarUbicaciones();
         //MODIFICACION OBSERVABLE DEL STATUS DE BASE DE DATOS
         this.isDBReady.next(true);
       }).catch(e=>{
@@ -299,7 +299,10 @@ export class ServicebdService {
 
   async iniciarSesion(usuario: any) {
     await this.storage.setItem('usuario_sesion', usuario);
-    this.usuarioSesionSubject.next(usuario);
+
+  
+    this.listadoUsuarios.next([usuario]); // Actualiza el observable con el nuevo usuario
+    this.usuarioSesionSubject.next(usuario); // Asegura que los datos se actualicen en la sesión
   }
 
   /////CONSULTA COMPLETA PUBLICACIONES + INSERCCION ListadoPublicaciones
@@ -311,6 +314,7 @@ export class ServicebdService {
       FROM publicaciones p 
       JOIN usuarios u ON p.id_usuario = u.id_usuario
       JOIN categorias c ON p.id_categoria = c.id_categoria
+      ORDER BY p.id_publicacion DESC
     `;
     
     return this.database.executeSql(query, []).then(res => {

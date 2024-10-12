@@ -66,6 +66,7 @@ export class IniciarPage implements OnInit {
 
     // Primero intenta validar al administrador
     const admin = await this.bd.validarAdmin(this.email, this.contra);
+
     if (admin) {
         // Guarda los datos del administrador en el almacenamiento nativo
         await this.storage.setItem('usuario_sesion', {
@@ -85,8 +86,12 @@ export class IniciarPage implements OnInit {
             await this.storage.setItem('usuario_sesion', {
                 id_usuario: usuario.id_usuario,
                 nombre_usuario: usuario.nombre_usuario,
-                id_rol: usuario.id_rol
+                id_rol: usuario.id_rol,
+                foto: usuario.foto  
             });
+
+            // Actualiza el observable de usuario activo inmediatamente
+            this.bd.consultarUsuarioActivo(usuario.id_usuario);
 
             // Redirige a la página del usuario
             this.router.navigate(['/home']);

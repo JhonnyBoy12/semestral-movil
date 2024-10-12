@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { ServicebdService } from './services/servicebd.service';
-import { Usuario } from './models/usuario'; // Asegúrate de importar el modelo Usuario
 
 @Component({
   selector: 'app-root',
@@ -24,12 +23,14 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Recuperar los datos de sesión desde NativeStorage
     this.storage.getItem('usuario_sesion')
       .then(data => {
         if (data) {
+          // Asignar nombre y foto del usuario
           this.nombreUsuario = data.nombre_usuario;
           this.fotoUsuario = data.foto || 'assets/icon/perfil.jpg'; // Imagen por defecto
-          
+  
           // Comprobar el rol para redirigir a la página correspondiente
           if (data.id_rol === 1) {
             this.router.navigate(['/home-admin']); // Redirigir al administrador
@@ -51,10 +52,10 @@ export class AppComponent implements OnInit {
       if (usuarios.length > 0) {
         const usuario = usuarios[0]; // Suponiendo que solo hay un usuario activo
         this.nombreUsuario = usuario.nombre_usuario;
-        this.fotoUsuario = usuario.foto || this.fotoUsuario; // Usar la foto del usuario, o la por defecto
+        this.fotoUsuario = usuario.foto || 'assets/icon/perfil.jpg'; // Usar la foto del usuario, o la por defecto
       } else {
-        this.nombreUsuario = ''; // Cuando no hay usuario
-        this.fotoUsuario = 'assets/icon/perfil.jpg'; // Resetear a la imagen por defecto
+        this.nombreUsuario = ''; // Cuando no hay usuario activo
+        this.fotoUsuario = 'assets/icon/perfil.jpg'; // Imagen por defecto
       }
     });
   }
@@ -69,16 +70,21 @@ export class AppComponent implements OnInit {
     await toast.present();
   }
 
+  // Cerrar Sesión
   async cerrarSesion() {
     try {
       await this.storage.remove('usuario_sesion');
-      this.bd.listadoUsuarios.next([]); // Limpiar el observable al cerrar sesión
+      this.bd.listadoUsuarios.next([]); // Limpiar el observable
+      
+      // Restablecer los valores locales de nombre y foto del usuario
+      this.nombreUsuario = '';
+      this.fotoUsuario = 'assets/icon/perfil.jpg';
+  
       this.presentToast('bottom');
-      this.router.navigate(['/iniciar']); // Redirige a iniciar sesión
+      this.router.navigate(['/iniciar']); // Redirigir a iniciar sesión
     } catch (error) {
       console.error('Error al cerrar sesión:', error);
       this.presentToast('bottom'); // Muestra un toast de error si es necesario
     }
   }
 }
-
