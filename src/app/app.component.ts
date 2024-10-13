@@ -23,6 +23,17 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    // Suscribirse al observable usuarioSesion$ para detectar cambios en la sesión
+    this.bd.usuarioSesion$.subscribe(usuario => {
+      if (usuario) {
+        this.nombreUsuario = usuario.nombre_usuario;
+        this.fotoUsuario = usuario.foto || 'assets/icon/perfil.jpg'; // Foto del usuario o imagen por defecto
+      } else {
+        this.nombreUsuario = '';
+        this.fotoUsuario = 'assets/icon/perfil.jpg'; // Imagen por defecto si no hay usuario
+      }
+    });
+
     // Recuperar los datos de sesión desde NativeStorage
     this.storage.getItem('usuario_sesion')
       .then(data => {
@@ -58,6 +69,7 @@ export class AppComponent implements OnInit {
         this.fotoUsuario = 'assets/icon/perfil.jpg'; // Imagen por defecto
       }
     });
+
   }
 
   // ALERTA TOAST
@@ -74,6 +86,7 @@ export class AppComponent implements OnInit {
   async cerrarSesion() {
     try {
       await this.storage.remove('usuario_sesion');
+      this.bd.usuarioSesionSubject.next(null);
       this.bd.listadoUsuarios.next([]); // Limpiar el observable
       
       // Restablecer los valores locales de nombre y foto del usuario

@@ -23,7 +23,7 @@ export class ForoPage implements OnInit {
     this.bd.dbState().subscribe(data => {
       if (data) {
         this.bd.consultarPublicaciones().then(res => {
-          this.publicaciones = res; // Asignamos los resultados a publicaciones
+          this.publicaciones = res; 
         }).catch(error => {
           console.error("Error al cargar las publicaciones:", error);
         });

@@ -22,33 +22,56 @@ export class PublicacionUsuarioPage implements OnInit {
     telefono: '',
     foto: ''
   };
-  public publicaciones: any[] = [];
-   usuarioId: any;
+
+  publicaciones: any[] = [];
+  usuarioId: number | null = null;
   
 
   constructor(private alertController: AlertController,
      private toastController: ToastController, 
      private bd: ServicebdService,
      private storage: NativeStorage ) { }
+
   ngOnInit() {
-    this.obtenerId();
+    
     this.cargarPublicaciones();
+
+    // Suscribirse a los cambios de la sesión del usuario
+    this.bd.usuarioSesion$.subscribe(usuario => {
+      if (usuario) {
+        this.usuario = usuario;
+        this.foto = usuario.foto || 'assets/icon/perfil.jpg'; // Actualizar la foto con la sesión
+      }
+    });
+
+    this.cargarDatosUsuario();
   }
   
-  async obtenerId(){
-    const usuario:Usuario = await this.storage.getItem('usuario_sesion'); // Obtén el usuario desde el almacenamiento
-  if (usuario) {
-    this.usuarioId = usuario.id_usuario; // Asigna el ID del usuario
-    console.log('ID del usuario:', this.usuarioId);
-    this.cargarPublicaciones();
-  } else {
-    console.warn('No se encontró la sesión del usuario.');
+  async cargarDatosUsuario() {
+    try {
+      const usuario = await this.storage.getItem('usuario_sesion');
+      if (usuario && usuario.id_usuario) {
+        this.usuarioId = usuario.id_usuario;
+        this.usuario = usuario;
+        this.foto = usuario.foto || this.foto; // Usar la foto del usuario si está disponible
+        this.cargarPublicaciones(); // Solo carga publicaciones si se tiene el id
+      } else {
+        console.warn('No se encontró la sesión del usuario.');
+      }
+    } catch (error) {
+      console.error('Error al obtener el usuario de la sesión:', error);
+    }
   }
-}
-  
 
   async cargarPublicaciones() {
-    this.publicaciones = await this.bd.consultarPublicacionesPorUsuario(this.usuarioId);
+    if (this.usuarioId) {
+      try {
+        this.publicaciones = await this.bd.consultarPublicacionesPorUsuario(this.usuarioId);
+      } catch (error) {
+        console.error('Error al cargar publicaciones:', error);
+        this.mostrarToast('Error al cargar las publicaciones.', 'danger');
+      }
+    }
   }
 
   async confirmarBorrado() {

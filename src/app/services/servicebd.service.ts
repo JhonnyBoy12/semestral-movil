@@ -12,7 +12,7 @@ import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 })
 export class ServicebdService {
 
-  private usuarioSesionSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+  public usuarioSesionSubject: BehaviorSubject<any> = new BehaviorSubject(null);
   public usuarioSesion$ = this.usuarioSesionSubject.asObservable();
 
   //CONEXION BASE DE DATOS
@@ -121,6 +121,14 @@ export class ServicebdService {
   //Observable
   fetchPublicaciones(): Observable<Publicacion[]>{
     return this.listadoPublicaciones.asObservable();
+  }
+
+  // Variable para guardar las publicaciones del usuario
+  listadoPublicacionesUsuario = new BehaviorSubject([]);
+
+  // Observable
+  fetchPublicacionesUsuario(): Observable<any[]> {
+    return this.listadoPublicacionesUsuario.asObservable();
   }
   ////////////////////////////////////////////////////////////
   
@@ -281,6 +289,8 @@ export class ServicebdService {
 
           // Emitir el usuario activo en el observable
           this.listadoUsuarios.next([usuarioActivo]); // Emitimos un array con el usuario encontrado
+
+          
         } else {
           console.warn('No se encontró el usuario activo con ID:', id_usuario);
           // Emitir un array vacío si no se encuentra el usuario
@@ -462,25 +472,43 @@ export class ServicebdService {
     }
 
     consultarPublicacionesPorUsuario(id_usuario: number): Promise<any[]> {
-      const query = 'SELECT * FROM publicaciones WHERE id_usuario = ? ORDER BY fecha_publicacion DESC';
-      return this.database.executeSql(query, [id_usuario])
-        .then(res => {
-          let items: any[] = [];
-          if (res.rows.length > 0) {
-            for (let i = 0; i < res.rows.length; i++) {
-              items.push(res.rows.item(i));
-            }
+      const query = `
+        SELECT p.id_publicacion, p.titulo, p.foto, p.descripcion, p.fecha_publicacion, 
+               u.nombre_usuario, u.telefono, u.foto AS foto_perfil, 
+               c.nombre_categoria AS categoria
+        FROM publicaciones p 
+        JOIN usuarios u ON p.id_usuario = u.id_usuario
+        JOIN categorias c ON p.id_categoria = c.id_categoria
+        WHERE p.id_usuario = ?
+        ORDER BY p.id_publicacion DESC
+      `;
+      
+      return this.database.executeSql(query, [id_usuario]).then(res => {
+        let items: any[] = [];
+        if (res.rows.length > 0) {
+          for (let i = 0; i < res.rows.length; i++) {
+            items.push({
+              id_publicacion: res.rows.item(i).id_publicacion,
+              titulo: res.rows.item(i).titulo,
+              foto: res.rows.item(i).foto,
+              descripcion: res.rows.item(i).descripcion,
+              nombre_usuario: res.rows.item(i).nombre_usuario,
+              foto_perfil: res.rows.item(i).foto_perfil,
+              telefono: res.rows.item(i).telefono,
+              categoria: res.rows.item(i).categoria
+            });
           }
-          return items;
-        })
-        .catch(e => {
-          console.error('Error al consultar las publicaciones:', e);
-          return [];
-        });
+        }
+        return items;
+      }).catch(e => {
+        this.presentAlert("Consultar PUBLICACIONES propias", "Error: " + JSON.stringify(e));
+        throw e;
+      });
     }
+    
 
     
-  }
+}
 
 
   

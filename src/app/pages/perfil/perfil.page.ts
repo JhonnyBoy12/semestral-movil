@@ -5,6 +5,7 @@ import { Camera, CameraResultType } from '@capacitor/camera';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { firstValueFrom } from 'rxjs';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-perfil',
@@ -12,7 +13,7 @@ import { firstValueFrom } from 'rxjs';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-  foto: string = 'assets/icon/perfil.jpg'; // Imagen por defecto
+  imagePerfil: string = 'assets/icon/perfil.jpg'; // Imagen por defecto
   usuario: Usuario = {
     id_usuario: 0,
     nombre_usuario: '',
@@ -26,10 +27,19 @@ export class PerfilPage implements OnInit {
   constructor(
     private bd: ServicebdService, 
     private router: Router, 
-    private storage: NativeStorage
+    private storage: NativeStorage,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
+    // Usar el BehaviorSubject para obtener datos actualizados del usuario
+    this.bd.usuarioSesion$.subscribe(usuario => {
+      if (usuario) {
+        this.usuario = usuario;
+        this.imagePerfil = usuario.foto || 'assets/icon/perfil.jpg'; // Actualiza la imagen
+      }
+    });
+    
     this.cargarDatosUsuario();
   }
 
@@ -42,21 +52,32 @@ export class PerfilPage implements OnInit {
         this.usuario.correo_usuario = data.correo_usuario || '';
         this.usuario.telefono = data.telefono || '';
         this.usuario.contrasena_usuario = data.contrasena_usuario || '';
-        this.usuario.foto = data.foto || this.foto; // Imagen por defecto si no hay foto
   
         // Obtener detalles completos del usuario desde la BD
         const usuarios = await firstValueFrom(this.bd.fetchUsuarios()); // Convertimos a Promise
         const userLogueado = usuarios.find(us => us.id_usuario === this.usuario.id_usuario);
+  
         if (userLogueado) {
           this.usuario = userLogueado; // Actualiza el usuario si se encuentra en la lista
+          // Si el usuario no tiene foto en la base de datos, asignamos la foto por defecto
+          this.imagePerfil = userLogueado.foto ? userLogueado.foto : 'assets/icon/perfil.jpg';
         } else {
-          // Si no se encuentra, llama a la función para consultar usuario activo
           this.bd.consultarUsuarioActivo(this.usuario.id_usuario);
         }
       }
     } catch (error) {
-      console.error('Error al recuperar datos de usuario', error);
+      this.presentAlert('Error al recuperar datos de usuario');
     }
+  }
+
+  // Alerta de error
+  async presentAlert(message: string) {
+    const alert = await this.alertController.create({
+      header: 'Error al publicar',
+      message: message,
+      buttons: ['Action'],
+    });
+    await alert.present();
   }
   
 
@@ -72,21 +93,27 @@ export class PerfilPage implements OnInit {
     try {
       const image = await Camera.getPhoto({
         quality: 90,
-        allowEditing: true,
-        resultType: CameraResultType.Uri
+        allowEditing: false,
+        resultType: CameraResultType.DataUrl, // Guarda la imagen en formato base64
       });
-      this.foto = image.webPath || '';
   
-      // Actualiza la foto en la base de datos
-      if (this.usuario.id_usuario) {
-        this.bd.actualizarFotoUsuario(this.usuario.id_usuario, this.foto).then(() => {
-          console.log('Foto de perfil actualizada');
-        }).catch(error => {
-          console.error('Error al actualizar la foto en la base de datos', error);
-        });
+      if (image && image.dataUrl) {
+        this.imagePerfil = image.dataUrl; // Actualiza la vista con la nueva imagen
+        
+        // Actualizar la foto en la base de datos
+        await this.bd.actualizarFotoUsuario(this.usuario.id_usuario, image.dataUrl);
+        
+        // Almacenar la nueva foto en la sesión
+        const usuarioActualizado = { ...this.usuario, foto: image.dataUrl };
+        await this.storage.setItem('usuario_sesion', usuarioActualizado);
+        
+        // Emitir el cambio de sesión al BehaviorSubject para propagarlo a la app
+        this.bd.usuarioSesionSubject.next(usuarioActualizado);
+      } else {
+        this.presentAlert('No se pudo capturar la imagen.');
       }
     } catch (error) {
-      console.error('Error al tomar la foto', error);
+      this.presentAlert(`Error al tomar la foto: ${error}`);
     }
   }
 }

@@ -9,7 +9,7 @@ import { ServicebdService } from '../services/servicebd.service';
 })
 export class HomePage implements OnInit {
   /// crear variables menu
-
+  id_usuario?: number;
   nombreMenu: string = "";
   emailMenu: string = "";
   telefonoMenu: string = "";
@@ -30,6 +30,7 @@ export class HomePage implements OnInit {
     this.storage.getItem('usuario_sesion')
       .then(data => {
         if (data) {
+          this.id_usuario = data.id_usuario;
           this.nombreMenu = data.nombre_usuario;
           this.emailMenu = data.correo_usuario;
           this.telefonoMenu = data.telefono;
