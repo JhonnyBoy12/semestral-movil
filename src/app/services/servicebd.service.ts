@@ -343,7 +343,7 @@ export class ServicebdService {
   
   /////////////////////////////
 
-  /////CONSULTA COMPLETA UBICACIONES + INSERCCION ListadoPublicaciones
+  /////CONSULTA COMPLETA UBICACIONES + INSERCCION ListadoUbicaciones
   consultarUbicaciones() {
     const query = 'SELECT * FROM ubicaciones';
     return this.database.executeSql(query, []).then(res => {
@@ -460,6 +460,27 @@ export class ServicebdService {
         return Promise.reject('Error al añadir la publicación'); // Propagar el error
       });
     }
-}
+
+    consultarPublicacionesPorUsuario(id_usuario: number): Promise<any[]> {
+      const query = 'SELECT * FROM publicaciones WHERE id_usuario = ? ORDER BY fecha_publicacion DESC';
+      return this.database.executeSql(query, [id_usuario])
+        .then(res => {
+          let items: any[] = [];
+          if (res.rows.length > 0) {
+            for (let i = 0; i < res.rows.length; i++) {
+              items.push(res.rows.item(i));
+            }
+          }
+          return items;
+        })
+        .catch(e => {
+          console.error('Error al consultar las publicaciones:', e);
+          return [];
+        });
+    }
+
+    
+  }
+
 
   

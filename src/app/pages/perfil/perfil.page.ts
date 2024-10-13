@@ -39,6 +39,9 @@ export class PerfilPage implements OnInit {
       if (data) {
         this.usuario.id_usuario = data.id_usuario;
         this.usuario.nombre_usuario = data.nombre_usuario || '';
+        this.usuario.correo_usuario = data.correo_usuario || '';
+        this.usuario.telefono = data.telefono || '';
+        this.usuario.contrasena_usuario = data.contrasena_usuario || '';
         this.usuario.foto = data.foto || this.foto; // Imagen por defecto si no hay foto
   
         // Obtener detalles completos del usuario desde la BD
