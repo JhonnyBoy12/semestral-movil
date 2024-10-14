@@ -18,148 +18,26 @@
       <ion-card-title>Lista de usuarios</ion-card-title>
       <ion-card-subtitle>Administrar</ion-card-subtitle>
     </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <!-- Contenedor para el primer ítem -->
-        <div class="item-container">
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
+    <ng-container *ngFor="let usuario of usuarios">
+      <div class="card-usuarios">
+        <div class="perfil">
+          <img [src]="usuario.foto" alt="Profile Picture" class="foto-perfil">
+          <span class="nombre">{{ usuario.nombre_usuario }}</span>
         </div>
+        <ion-card class="card-conten">
+          <ion-card-header>
+            <ion-card-title>{{ usuario.correo_usuario }}</ion-card-title>
+          </ion-card-header>
 
-        <!-- Contenedor para el segundo ítem -->
-        <div class="item-container" >
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </div>
+         <ion-card-content>
+            {{ usuario.telefono }}
+          </ion-card-content>
 
-        <!-- Contenedor para el segundo ítem -->
-        <div class="item-container" >
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </div>
-
-        <!-- Contenedor para el segundo ítem -->
-        <div class="item-container" >
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </div>
-
-        <!-- Contenedor para el segundo ítem -->
-        <div class="item-container" >
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </div>
-
-        <!-- Contenedor para el segundo ítem -->
-        <div class="item-container" >
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </div>
-
-        <!-- Contenedor para el segundo ítem -->
-        <div class="item-container" >
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </div>
-
-        <!-- Contenedor para el segundo ítem -->
-        <div class="item-container" >
-          <ion-item>
-            <ion-thumbnail slot="start">
-              <img alt="Profile Picture" src="https://ionicframework.com/docs/img/demos/thumbnail.svg" class="circular-image"/>
-            </ion-thumbnail>
-            <ion-label>
-              <ion-input placeholder="Nombre del Usuario"></ion-input>
-              <ion-input placeholder="Email"></ion-input>
-              <ion-input placeholder="Teléfono"></ion-input>
-            </ion-label>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-              <ion-icon name="trash"></ion-icon>
-            </ion-button>
-          </ion-item>
-        </div>
-
-
-      </ion-list>
-    </ion-card-content>
+          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-card>
+      </div>
+    </ng-container>
   </ion-card>
 </ion-content>
-
-

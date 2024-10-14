@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-ubicaciones',
@@ -7,10 +8,24 @@ import { Router } from '@angular/router';
   styleUrls: ['./ubicaciones.page.scss'],
 })
 export class UbicacionesPage implements OnInit {
-
-  constructor(private router: Router) { }
-
+  ubicaciones: any | undefined;
+ 
+  constructor(private router: Router, private bd:ServicebdService) { }
+  
   ngOnInit() {
+    this.cargarUbicaciones();
+  }
+
+  cargarUbicaciones(){
+    this.bd.dbState().subscribe(data => {
+      if (data) {
+        this.bd.consultarUbicaciones().then(res => {
+          this.ubicaciones = res; 
+        }).catch(error => {
+          console.error("Error al cargar las ubicaciones:", error);
+        });
+      }
+    });
   }
 
   mensajeProvisorio(){

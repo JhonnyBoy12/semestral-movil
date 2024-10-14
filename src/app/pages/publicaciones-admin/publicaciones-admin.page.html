@@ -14,343 +14,45 @@
 
 <ion-content [fullscreen]="true" color="secondary">
   
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-      
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
+  <ng-container *ngFor="let publicacion of publicaciones">
+    <div class="card-publicacion">
+      <div class="perfil">
+        <img src="publicacion.foto_perfil" alt="Profile Picture" class="foto-perfil">
+        <span class="nombre">{{publicacion.nombre_usuario}}</span>
+      </div>
+      <ion-card class="card-conten">
+        <ion-card-header>
+          <div class="header-content">
+            <ion-card-title>{{publicacion.titulo}}</ion-card-title>
+            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-card-header>
+        
+        <img [src]="publicacion.foto_perfil"alt="Imagen de la Publicación" class="imagen"/>
 
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
+        <ion-card-content>
+          {{publicacion.descripcion}}
+        </ion-card-content>
 
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
+        <ion-row class="boton-accion">
+          <ion-col>
+            <ion-button fill="clear" color="dark">
+              <ion-icon name="bookmark-outline"></ion-icon>
+              Guardar
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button fill="clear" color="dark">
+              <ion-icon name="call-outline"></ion-icon>
+              Contactar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+      </div>
+  </ng-container>
 
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
 
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
-
-  <div class="card-publicacion">
-    <div class="perfil">
-      <img src="https://ionicframework.com/docs/demos/api/avatar/avatar.svg" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">Nombre de Usuario</span>
-    </div>
-    <ion-card class="card-conten">
-      <ion-card-header>
-        <div class="header-content">
-          <ion-card-title>Título de la Publicación</ion-card-title>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </div>
-      </ion-card-header>
-
-      <img src="https://ionicframework.com/docs/img/demos/card-media.png" alt="Imagen de la Publicación" class="imagen"/>
-
-      <ion-card-content>
-        Descripción breve de la publicación. Algo atractivo para llamar la atención.
-      </ion-card-content>
-
-      <ion-row class="boton-accion">
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="bookmark-outline"></ion-icon>
-            Guardar
-          </ion-button>
-        </ion-col>
-        <ion-col>
-          <ion-button fill="clear" color="dark">
-            <ion-icon name="call-outline"></ion-icon>
-            Contactar
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-card>
-  </div>
 </ion-content>

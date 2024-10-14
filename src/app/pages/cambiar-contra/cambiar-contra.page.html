@@ -1,13 +1,22 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>cambiar-contra</ion-title>
-  </ion-toolbar>
+  
 </ion-header>
 
+
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">cambiar-contra</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <img src="assets/icon/logo.png" alt="App Logo" class="logo" />
+  
+
+  <!-- Formulario para cambiar la contraseña -->
+  <ion-item>
+    <ion-label position="floating">Contraseña actual</ion-label>
+    <ion-input type="password" [(ngModel)]="antiguaContra"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Nueva contraseña</ion-label>
+    <ion-input type="password" [(ngModel)]="nuevaContra"></ion-input>
+  </ion-item>
+
+  <ion-button expand="full" (click)="cambiarContrasena()">Cambiar contraseña</ion-button>
 </ion-content>

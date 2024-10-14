@@ -10,7 +10,7 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class ForoPage implements OnInit {
 
-  publicaciones: any[] =[];
+  publicaciones: any[]=[];
 
   constructor(private toastController: ToastController, private alertController: AlertController,
   public popoverController: PopoverController, private bd:ServicebdService) { }

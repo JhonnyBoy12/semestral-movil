@@ -1,13 +1,45 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>cambiar-nombre</ion-title>
-  </ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <div class="superior">
+      <ion-title>Cambiar Nombre de Usuario</ion-title>
+      <div class="logo">
+          <img src="assets/icon/logo.png"/>
+      </div>
+    </div>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">cambiar-nombre</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <img src="assets/icon/logo.png" alt="App Logo" class="logo" />
+  
+
+  <div class="login-recuadro">
+    <ion-card class="login-card" color="light">
+      
+      <ion-card-header>
+        <ion-card-title>Modificar contraseña</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form>
+          <ion-item color="light">
+            <ion-input type="password" label="Contraseña" labelPlacement="floating" placeholder="Ingrese su contrasena antigua"
+           ></ion-input>
+          </ion-item>
+
+          <ion-item color="light">
+            <ion-input type="password" label="Contraseña" labelPlacement="floating" placeholder="Ingrese su contraseña nueva"
+            ></ion-input>
+          </ion-item>
+
+          <ion-button>
+            Guardar Cambios
+          </ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

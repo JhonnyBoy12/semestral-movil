@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ToastController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-ubicaciones-admin',
@@ -8,18 +9,38 @@ import { AlertController, ToastController } from '@ionic/angular';
   styleUrls: ['./ubicaciones-admin.page.scss'],
 })
 export class UbicacionesAdminPage implements OnInit {
+  ubicaciones: any;
 
-  isToastOpen = false;
+ 
 
-  setOpen(isOpen: boolean) {
-    this.isToastOpen = isOpen;
-  }
-    
-
-  constructor(private router: Router, private alertController: AlertController, private toastController: ToastController) { }
+  constructor(private router: Router, private alertController: AlertController, private toastController: ToastController, private bd:ServicebdService) { }
  
   ngOnInit() {
+    this.consultarUsuariosAdmin();
   }
+
+
+  consultarUsuariosAdmin(){
+    this.bd.dbState().subscribe(data =>{
+      if(data){
+        this.bd.consultarUbicaciones().then(res =>{
+          this.ubicaciones = res;
+        }).catch(error =>{
+          console.error('Error al cargar las Ubicaciones', error)
+        });
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
+
   async confirmarBorrado() {
     const alert = await this.alertController.create({
       header: 'Confirmar Borrado',

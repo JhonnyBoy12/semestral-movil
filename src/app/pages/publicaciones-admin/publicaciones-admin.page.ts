@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-publicaciones-admin',
@@ -7,13 +8,26 @@ import { AlertController, ToastController } from '@ionic/angular';
   styleUrls: ['./publicaciones-admin.page.scss'],
 })
 export class PublicacionesAdminPage implements OnInit {
-  
+  publicaciones: any []= []
     
 
 
-  constructor(private alertController: AlertController, private toastController: ToastController) { }
+  constructor(private alertController: AlertController, private toastController: ToastController, private bd:ServicebdService) { }
 
   ngOnInit() {
+    this.cargarPublicaciones();
+  }
+
+  cargarPublicaciones() {
+    this.bd.dbState().subscribe(data => {
+      if (data) {
+        this.bd.consultarPublicaciones().then(res => {
+          this.publicaciones = res; 
+        }).catch(error => {
+          console.error("Error al cargar las publicaciones:", error);
+        });
+      }
+    });
   }
 
   async confirmarBorrado() {

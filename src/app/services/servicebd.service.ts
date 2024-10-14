@@ -96,6 +96,9 @@ export class ServicebdService {
   servicioGuarderia: string = "INSERT OR IGNORE INTO servicios(nombre_servicio) VALUES ('Guardería o cuidado temporal')";
   servicioDomicilio: string = "INSERT OR IGNORE INTO servicios(nombre_servicio) VALUES ('Servicio a domicilio')";
 
+  //// INSERTS TABLA UBICACIONES
+
+  
 
   //SUPER ADMIN
   superAdmin: string = "INSERT OR IGNORE INTO administrador (id_rol, nombre, correo_electronico, contrasena, telefono) VALUES (1, 'SuperAdmin', 'admin@gmail.com', 'Admin.12345', '1234567890')";
@@ -109,6 +112,17 @@ export class ServicebdService {
   //Observable
   fetchUsuarios(): Observable<Usuario[]>{
     return this.listadoUsuarios.asObservable();
+  }
+
+
+  ////===OBSERVABLES Y GUARDADOS TABLA "USUARIOS del admin"///////////////
+  
+  //variable de guardado SELECT
+  listadoUsuariosAdmin = new BehaviorSubject<Usuario[]>([]);
+
+  //Observable
+  fetchUsuariosAdmin(): Observable<Usuario[]>{
+    return this.listadoUsuariosAdmin.asObservable();
   }
   ////////////////////////////////////////////////////////////
 
@@ -355,7 +369,7 @@ export class ServicebdService {
 
   /////CONSULTA COMPLETA UBICACIONES + INSERCCION ListadoUbicaciones
   consultarUbicaciones() {
-    const query = 'SELECT * FROM ubicaciones';
+    const query = `SELECT nombre_ubicacion, direccion, telefono_lugar FROM ubicaciones`;
     return this.database.executeSql(query, []).then(res => {
       let items: Ubicacion[] = [];
       if (res.rows.length > 0) {
@@ -502,6 +516,63 @@ export class ServicebdService {
         return items;
       }).catch(e => {
         this.presentAlert("Consultar PUBLICACIONES propias", "Error: " + JSON.stringify(e));
+        throw e;
+      });
+    }
+
+    consultarUsuariosAdmin(){
+      const query = `SELECT * FROM usuarios`;
+    return this.database.executeSql(query, []).then(res => {
+      let items: Usuario[] = [];
+      if (res.rows.length > 0) {
+        for (let i = 0; i < res.rows.length; i++) {
+          items.push({
+            nombre_usuario: res.rows.item(i).nombre_usuario,
+            correo_usuario: res.rows.item(i).corre_usuario,
+            telefono: res.rows.item(i).telefono,
+            foto: res.rows.item(i).foto,
+            id_usuario: 0,
+            contrasena_usuario: '',
+            id_rol: 0
+          });
+        }
+      }
+      this.listadoUsuariosAdmin.next(items as any);
+    }).catch(e => {
+      console.error('Error al consultar usuarios', e);
+    });
+    }
+
+    async obtenerUsuarioSesion(): Promise<any> {
+      try {
+        const usuarioSesion = await this.storage.getItem('usuario_sesion');
+        return usuarioSesion;
+      } catch (error) {
+        console.error('Error al obtener la sesión del usuario', error);
+        return null;
+      }
+    }
+    actualizarContrasenaUsuario(id_usuario: number, contrasenaActual: string, nuevaContrasena: string): Promise<void> {
+      // Primero, validamos que la contraseña actual sea correcta
+      const queryValidar = `SELECT * FROM usuarios WHERE id_usuario = ? AND contrasena_usuario = ?`;
+    
+      return this.database.executeSql(queryValidar, [id_usuario, contrasenaActual]).then(result => {
+        if (result.rows.length > 0) {
+          // La contraseña actual es correcta, procedemos a actualizar
+          const queryActualizar = `UPDATE usuarios SET contrasena_usuario = ? WHERE id_usuario = ?`;
+          return this.database.executeSql(queryActualizar, [nuevaContrasena, id_usuario])
+            .then(() => {
+              console.log('Contraseña actualizada correctamente');
+            })
+            .catch(e => {
+              console.error('Error al actualizar la contraseña', e);
+              throw e;
+            });
+        } else {
+          throw new Error('Contraseña actual incorrecta');
+        }
+      }).catch(e => {
+        console.error('Error al validar la contraseña actual', e);
         throw e;
       });
     }
