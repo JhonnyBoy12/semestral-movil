@@ -13,7 +13,7 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./perfil.page.scss'],
 })
 export class PerfilPage implements OnInit {
-  imagePerfil: string = 'assets/icon/perfil.jpg'; // Imagen por defecto
+  imagePerfil: string = ''; // Imagen por defecto
   usuario: Usuario = {
     id_usuario: 0,
     nombre_usuario: '',
@@ -40,35 +40,35 @@ export class PerfilPage implements OnInit {
       }
     });
     
-    this.cargarDatosUsuario();
+    this.storage.getItem('usuario_sesion')
+      .then(data => {
+        if (data) {
+          // Asignar nombre y foto del usuario
+          this.usuario = data;
+          this.imagePerfil = data.foto || 'assets/icon/perfil.jpg'; // Imagen por defecto
+  
+        } else {
+          // Si no hay sesión, redirigir a la página de inicio de sesión
+          this.router.navigate(['/iniciar']);
+        }
+      })
+      .catch(error => {
+        console.error('Error al recuperar datos de sesión:', error);
+        this.router.navigate(['/iniciar']);
+      });
+    
+    // Suscribirse a los cambios de sesión del usuario
+    this.bd.fetchUsuarios().subscribe(usuarios => {
+      if (usuarios.length > 0) {
+        const usuario = usuarios[0]; // Suponiendo que solo hay un usuario activo
+        this.usuario = usuario;
+        this.imagePerfil = usuario.foto || 'assets/icon/perfil.jpg'; // Usar la foto del usuario, o la por defecto
+      } else {
+        this.imagePerfil = 'assets/icon/perfil.jpg'; // Imagen por defecto
+      }
+    });
   }
 
-  async cargarDatosUsuario() {
-    try {
-      const data = await this.storage.getItem('usuario_sesion');
-      if (data) {
-        this.usuario.id_usuario = data.id_usuario;
-        this.usuario.nombre_usuario = data.nombre_usuario || '';
-        this.usuario.correo_usuario = data.correo_usuario || '';
-        this.usuario.telefono = data.telefono || '';
-        this.usuario.contrasena_usuario = data.contrasena_usuario || '';
-  
-        // Obtener detalles completos del usuario desde la BD
-        const usuarios = await firstValueFrom(this.bd.fetchUsuarios()); // Convertimos a Promise
-        const userLogueado = usuarios.find(us => us.id_usuario === this.usuario.id_usuario);
-  
-        if (userLogueado) {
-          this.usuario = userLogueado; // Actualiza el usuario si se encuentra en la lista
-          // Si el usuario no tiene foto en la base de datos, asignamos la foto por defecto
-          this.imagePerfil = userLogueado.foto ? userLogueado.foto : 'assets/icon/perfil.jpg';
-        } else {
-          this.bd.consultarUsuarioActivo(this.usuario.id_usuario);
-        }
-      }
-    } catch (error) {
-      this.presentAlert('Error al recuperar datos de usuario');
-    }
-  }
 
   // Alerta de error
   async presentAlert(message: string) {

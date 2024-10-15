@@ -13,11 +13,12 @@ import { Usuario } from 'src/app/models/usuario';
   styleUrls: ['./publicar.page.scss'],
 })
 export class PublicarPage implements OnInit {
-  
+
+  imagePerfil: string ="";
+
   titulo: string = '';
   descripcion: string = '';
   imagePreview: string | ArrayBuffer | null = null;
-  id_usuario: number = 0; // Este valor lo tomaremos del usuario en sesión
   publicacion_adopcion: boolean = false;
 
   // Definimos las categorías
@@ -32,7 +33,15 @@ export class PublicarPage implements OnInit {
   id_categoria: number | null = null; // Inicializamos como null
 
   // Definir la propiedad usuarios
-  usuario: Usuario | null = null;
+  usuario: Usuario = {
+    id_usuario: 0,
+    nombre_usuario: '',
+    correo_usuario: '',
+    contrasena_usuario: '',
+    id_rol: 0,
+    telefono: '',
+    foto: ''
+  };
 
   constructor(
     private router: Router,
@@ -43,31 +52,46 @@ export class PublicarPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Obtiene el id del usuario desde NativeStorage
-    this.storage.getItem('usuario_sesion').then(data => {
-      if (data) {
-        this.id_usuario = data.id_usuario; // Asigna el ID del usuario
-        this.cargarDatosUsuario();
-      } else {
-        this.presentAlert('No se encontró el usuario en NativeStorage.');
+
+    // Usar el BehaviorSubject para obtener datos actualizados del usuario
+    this.bd.usuarioSesion$.subscribe(usuario => {
+      if (usuario) {
+        this.usuario = usuario;
+        this.imagePerfil = usuario.foto || 'assets/icon/perfil.jpg'; // Actualiza la imagen
       }
-    }).catch(error => {
-      this.presentAlert(`Error al obtener el usuario de NativeStorage: ${error}`);
+    });
+    
+    // Obtiene el id del usuario desde NativeStorage
+    this.storage.getItem('usuario_sesion')
+      .then(data => {
+        if (data) {
+          // Asignar nombre y foto del usuario
+          this.usuario = data;
+          this.imagePerfil = data.foto || 'assets/icon/perfil.jpg'; // Imagen por defecto
+  
+        } else {
+          // Si no hay sesión, redirigir a la página de inicio de sesión
+          this.router.navigate(['/iniciar']);
+        }
+      })
+      .catch(error => {
+        console.error('Error al recuperar datos de sesión:', error);
+        this.router.navigate(['/iniciar']);
+      });
+
+      // Suscribirse a los cambios de sesión del usuario
+    this.bd.fetchUsuarios().subscribe(usuarios => {
+      if (usuarios.length > 0) {
+        const usuario = usuarios[0]; // Suponiendo que solo hay un usuario activo
+        this.usuario = usuario;
+        this.imagePerfil = usuario.foto || 'assets/icon/perfil.jpg'; // Usar la foto del usuario, o la por defecto
+      } else {
+        this.imagePerfil = 'assets/icon/perfil.jpg'; // Imagen por defecto
+      }
     });
   }
 
-  async cargarDatosUsuario() {
-    try {
-      const usuarios = await firstValueFrom(this.bd.fetchUsuarios());
-      this.usuario = usuarios.find(us => us.id_usuario === this.id_usuario) || null; // Encuentra el usuario activo
-      if (!this.usuario) {
-        this.presentAlert('No se encontró el usuario activo.');
-      }
-    } catch (error) {
-      console.error('Error al recuperar la información del usuario', error);
-      this.presentAlert('Error al cargar la información del usuario, intente nuevamente.');
-    }
-  }
+  
 
   // Método para obtener el nombre de la categoría
   getNombreCategoria(id: number | null): string {
@@ -142,7 +166,7 @@ export class PublicarPage implements OnInit {
 
     // Preparamos los datos para la publicación
     const publicacion = {
-      id_usuario: this.id_usuario,
+      id_usuario: this.usuario.id_usuario,
       titulo: this.titulo,
       foto: this.imagePreview as string,
       descripcion: this.descripcion,

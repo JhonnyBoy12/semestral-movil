@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, ToastController } from '@ionic/angular';
 import { ComponentemenuComponent } from 'src/app/components/componentemenu/componentemenu.component';
+import { ServicebdService } from 'src/app/services/servicebd.service';
+import { Usuario } from 'src/app/models/usuario';
+import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 
 @Component({
   selector: 'app-publicacion-guardada',
@@ -9,14 +12,73 @@ import { ComponentemenuComponent } from 'src/app/components/componentemenu/compo
 })
 export class PublicacionGuardadaPage implements OnInit {
 
-  constructor(private toastController: ToastController, public popoverController: PopoverController) { }
+  foto: string = ''; // Imagen por defecto
+  usuario: Usuario = {
+    id_usuario: 0,
+    nombre_usuario: '',
+    correo_usuario: '',
+    contrasena_usuario: '',
+    id_rol: 0,
+    telefono: '',
+    foto: ''
+  };
+
+  publicacionesGuardadas: any[] = [];
+
+
+  constructor(private toastController: ToastController, public popoverController: PopoverController,
+     private bd: ServicebdService, private storage: NativeStorage) { }
 
   ngOnInit() {
+    // Suscribirse a los cambios de la sesión del usuario
+    this.bd.usuarioSesion$.subscribe(usuario => {
+      if (usuario) {
+        this.usuario = usuario;
+        this.foto = usuario.foto || 'assets/icon/perfil.jpg'; // Actualizar la foto con la sesión
+      }
+    });
+
+    this.storage.getItem('usuario_sesion')
+      .then(data => {
+        if (data) {
+          // Asignar nombre y foto del usuario
+          this.usuario = data;
+          this.foto = data.foto || 'assets/icon/perfil.jpg'; // Imagen por defecto
+  
+        }
+      })
+      .catch(error => {
+        console.error('Error al recuperar datos de sesión:', error);
+      });
+    
+    // Suscribirse a los cambios de sesión del usuario
+    this.bd.fetchUsuarios().subscribe(usuarios => {
+      if (usuarios.length > 0) {
+        const usuario = usuarios[0]; // Suponiendo que solo hay un usuario activo
+        this.usuario = usuario;
+        this.foto = usuario.foto || 'assets/icon/perfil.jpg'; // Usar la foto del usuario, o la por defecto
+      } else {
+        this.foto = 'assets/icon/perfil.jpg'; // Imagen por defecto
+      }
+    });
+
+    this.cargarPublicacionesGuardadas();
   }
 
-  async presentToast(position: 'top' | 'middle' | 'bottom') {
+  async cargarPublicacionesGuardadas() {
+    if (this.usuario.id_usuario) {
+      try {
+        this.publicacionesGuardadas = await this.bd.consultarPublicacionesGuardadas(this.usuario.id_usuario);
+      } catch (error) {
+        console.error('Error al cargar publicaciones:', error);
+        this.presentToast("Error al cargar publicaciones guardadas",'bottom');
+      }
+    }
+  }
+
+  async presentToast(mensaje:string, position: 'top' | 'middle' | 'bottom') {
     const toast = await this.toastController.create({
-      message: `Se ha borrado la publicacion de guardados`,
+      message: mensaje,
       duration: 2000,
       position: position,
     });
@@ -36,7 +98,7 @@ export class PublicacionGuardadaPage implements OnInit {
 
 
   quitarGuardado(){
-    this.presentToast('bottom');
+    this.presentToast("Se ah quitado de guardado la publicacion",'bottom');
   }
 
 }

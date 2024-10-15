@@ -53,20 +53,20 @@ export class IniciarPage implements OnInit {
         this.presentAlert('Por favor ingrese su correo electrónico.');
         return;
     }
-
+  
     if (!this.contra) {
         this.presentAlert('Por favor ingrese su contraseña.');
         return;
     }
-
+  
     if (!this.validarEmail(this.email)) {
         this.presentAlert('Por favor ingrese un correo electrónico válido.');
         return;
     }
-
+  
     // Primero intenta validar al administrador
     const admin = await this.bd.validarAdmin(this.email, this.contra);
-
+  
     if (admin) {
         // Guarda los datos del administrador en el almacenamiento nativo
         await this.storage.setItem('usuario_sesion', {
@@ -74,7 +74,7 @@ export class IniciarPage implements OnInit {
             nombre_usuario: admin.nombre,
             id_rol: admin.id_rol
         });
-
+  
         // Redirige a la página del administrador
         this.router.navigate(['/home-admin']);
         this.presentToast('bottom', "administrador");
@@ -82,23 +82,28 @@ export class IniciarPage implements OnInit {
         // Si no es administrador, intenta validar como usuario
         const usuario = await this.bd.validarUsuario(this.email, this.contra);
         if (usuario) {
-            // Guarda los datos del usuario en el almacenamiento nativo
-            await this.storage.setItem('usuario_sesion', {
-                id_usuario: usuario.id_usuario,
-                nombre_usuario: usuario.nombre_usuario,
-                id_rol: usuario.id_rol,
-                foto: usuario.foto  
-            });
-
-            // Actualiza el observable de usuario activo inmediatamente
-            this.bd.consultarUsuarioActivo(usuario.id_usuario);
-
-            // Redirige a la página del usuario
-            this.router.navigate(['/home']);
-            this.presentToast('bottom', "usuario");
+            // Después de la validación, consulta los datos completos del usuario
+            const datosCompletos = await this.bd.consultarUsuarioActivo(usuario.id_usuario);
+  
+            if (datosCompletos) {
+                // Guarda los datos completos del usuario en el almacenamiento nativo
+                await this.storage.setItem('usuario_sesion', {
+                    id_usuario: datosCompletos.id_usuario,
+                    nombre_usuario: datosCompletos.nombre_usuario,
+                    id_rol: datosCompletos.id_rol,
+                    foto: datosCompletos.foto,
+                    telefono: datosCompletos.telefono,  // Cualquier otro dato relevante
+                    correo_usuario: datosCompletos.correo_usuario,  // Correo electrónico
+                    contrasena_usuario: datosCompletos.contrasena_usuario
+                });
+  
+                // Redirige a la página del usuario
+                this.router.navigate(['/home']);
+                this.presentToast('bottom', "usuario");
+            }
         } else {
             this.presentAlert('Correo electrónico o contraseña inválida.');
         }
-      }
+    }
   }
 }

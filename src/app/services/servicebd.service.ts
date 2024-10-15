@@ -285,35 +285,37 @@ export class ServicebdService {
   }
 
   /////CONSULTA COMPLETA USUARIO + INSERCCION ListadoUsuarios
-  consultarUsuarioActivo(id_usuario: number): void {
-    const query = 'SELECT nombre_usuario, correo_usuario, telefono, foto, contrasena_usuario, id_rol FROM usuarios WHERE id_usuario = ?';
+  consultarUsuarioActivo(id_usuario: number): Promise<Usuario | null> {
+    const query = 'SELECT id_usuario, nombre_usuario, correo_usuario, telefono, foto, contrasena_usuario, id_rol FROM usuarios WHERE id_usuario = ?';
 
-    this.database.executeSql(query, [id_usuario])
+    return this.database.executeSql(query, [id_usuario])
       .then(res => {
         if (res.rows.length > 0) {
           const usuarioActivo: Usuario = {
-            id_usuario: id_usuario,
+            id_usuario: res.rows.item(0).id_usuario,
             nombre_usuario: res.rows.item(0).nombre_usuario,
-            correo_usuario: res.rows.item(0).correo_usuario,
-            contrasena_usuario: res.rows.item(0).contrasena_usuario || '', // Valor por defecto
-            id_rol: res.rows.item(0).id_rol || 0, // Valor por defecto
-            telefono: res.rows.item(0).telefono,
-            foto: res.rows.item(0).foto || 'assets/icon/perfil.jpg',
+            correo_usuario: res.rows.item(0).correo_usuario,  // Correo electrónico
+            telefono: res.rows.item(0).telefono,  // Teléfono
+            foto: res.rows.item(0).foto,  // Foto del perfil
+            id_rol: res.rows.item(0).id_rol,
+            contrasena_usuario: res.rows.item(0).contrasena_usuario  // Contraseña
           };
 
           // Emitir el usuario activo en el observable
-          this.listadoUsuarios.next([usuarioActivo]); // Emitimos un array con el usuario encontrado
+          this.listadoUsuarios.next([usuarioActivo]);
 
-          
+          // Retornar los datos del usuario activo
+          return usuarioActivo;
         } else {
           console.warn('No se encontró el usuario activo con ID:', id_usuario);
-          // Emitir un array vacío si no se encuentra el usuario
           this.listadoUsuarios.next([]);
+          return null;  // No se encontró el usuario
         }
       })
       .catch(e => {
         console.error('Error al consultar usuario activo:', e);
         this.presentAlert("Consultar Usuario Activo", "Error: " + JSON.stringify(e));
+        return null;
       });
   }
 
@@ -353,7 +355,7 @@ export class ServicebdService {
             nombre_usuario: res.rows.item(i).nombre_usuario,
             foto_perfil: res.rows.item(i).foto_perfil,
             telefono: res.rows.item(i).telefono,
-            categoria: res.rows.item(i).categoria  // Ahora es correcto
+            categoria: res.rows.item(i).categoria  
           });
         }
       }
@@ -361,6 +363,43 @@ export class ServicebdService {
     }).catch(e => {
       this.presentAlert("Consultar PUBLICACIONES vista foro", "Error: " + JSON.stringify(e));
       throw e;  // Lanza el error para que pueda ser capturado en `cargarPublicaciones()`
+    });
+  }
+
+  consultarPublicacionesGuardadas(id_usuario: number): Promise<any[]> {
+    const query = `
+      SELECT pg.id_guardado, p.id_publicacion, p.titulo, p.foto, p.descripcion, 
+             u.nombre_usuario, u.telefono, u.foto AS foto_perfil, 
+             c.nombre_categoria AS categoria
+      FROM publicaciones_guardadas pg
+      JOIN publicaciones p ON pg.id_publicacion = p.id_publicacion
+      JOIN usuarios u ON p.id_usuario = u.id_usuario
+      JOIN categorias c ON p.id_categoria = c.id_categoria
+      WHERE pg.id_usuario = ?
+      ORDER BY pg.id_guardado DESC
+    `;
+
+    return this.database.executeSql(query, [id_usuario]).then(res => {
+        let items: any[] = [];
+        if (res.rows.length > 0) {
+            for (let i = 0; i < res.rows.length; i++) {
+                items.push({
+                    id_guardado: res.rows.item(i).id_guardado,
+                    id_publicacion: res.rows.item(i).id_publicacion,
+                    titulo: res.rows.item(i).titulo,
+                    foto: res.rows.item(i).foto,
+                    descripcion: res.rows.item(i).descripcion,
+                    nombre_usuario: res.rows.item(i).nombre_usuario,
+                    foto_perfil: res.rows.item(i).foto_perfil,
+                    telefono: res.rows.item(i).telefono,
+                    categoria: res.rows.item(i).categoria
+                });
+            }
+        }
+        return items;
+    }).catch(e => {
+        this.presentAlert("Consultar PUBLICACIONES GUARDADAS", "Error: " + JSON.stringify(e));
+        throw e;  // Lanza el error para que pueda ser capturado donde se llama
     });
   }
   
@@ -420,30 +459,32 @@ export class ServicebdService {
   //METODOS INICIAR SESION
   // Método para validar el usuario e iniciar sesión
   async validarUsuario(email: string, contra: string) {
-    const query = `SELECT id_usuario, nombre_usuario, id_rol,
-                  CASE 
-                    WHEN id_rol = 1 THEN 'Administrador' 
-                    WHEN id_rol = 2 THEN 'Usuario' 
-                  END AS nombre_rol 
-                  FROM usuarios WHERE correo_usuario = ? AND contrasena_usuario = ?`;
+    const query = `SELECT id_usuario, nombre_usuario, id_rol, foto, telefono, correo_usuario
+                   FROM usuarios 
+                   WHERE correo_usuario = ? AND contrasena_usuario = ?`;
     
     const result = await this.database.executeSql(query, [email, contra]);
     
     if (result.rows.length > 0) {
         const usuario = result.rows.item(0);
         
-        // Guarda los datos del usuario en el almacenamiento nativo
+        // Guarda los datos completos del usuario en el almacenamiento nativo
         await this.storage.setItem('usuario_sesion', {
           id_usuario: usuario.id_usuario,
           nombre_usuario: usuario.nombre_usuario,
-          id_rol: usuario.id_rol
+          id_rol: usuario.id_rol,
+          foto: usuario.foto,  // Incluye la foto
+          telefono: usuario.telefono,  // Otros datos si son necesarios
+          email: usuario.correo_usuario,
+          contrasena_usuario: usuario.contrasena_usuario
         });
 
         return usuario;
     } else {
         return null; // Usuario no encontrado
     }
-  }
+}
+
 
   // Método para validar el administrador e iniciar sesión
   async validarAdmin(email: string, contra: string) {
@@ -552,6 +593,7 @@ export class ServicebdService {
         return null;
       }
     }
+
     actualizarContrasenaUsuario(id_usuario: number, contrasenaActual: string, nuevaContrasena: string): Promise<void> {
       // Primero, validamos que la contraseña actual sea correcta
       const queryValidar = `SELECT * FROM usuarios WHERE id_usuario = ? AND contrasena_usuario = ?`;
@@ -574,6 +616,35 @@ export class ServicebdService {
       }).catch(e => {
         console.error('Error al validar la contraseña actual', e);
         throw e;
+      });
+    }
+
+    guardarPublicacion(id_usuario: number, id_publicacion: number): Promise<void> {
+      const query = `
+        INSERT INTO publicaciones_guardadas (id_usuario, id_publicacion) 
+        VALUES (?, ?)
+      `;
+  
+      return this.database.executeSql(query, [id_usuario, id_publicacion]).then(() => {
+          console.log('Publicación guardada correctamente');
+      }).catch(e => {
+          this.presentAlert("Guardar PUBLICACION", "Error: " + JSON.stringify(e));
+          throw e;  // Lanza el error si es necesario manejarlo
+      });
+    }
+
+    validarPublicacionGuardada(id_usuario: number, id_publicacion: number): Promise<boolean> {
+      const query = `
+          SELECT COUNT(*) as count
+          FROM publicaciones_guardadas
+          WHERE id_usuario = ? AND id_publicacion = ?
+      `;
+  
+      return this.database.executeSql(query, [id_usuario, id_publicacion]).then(res => {
+          return res.rows.item(0).count > 0; // Devuelve true si ya está guardada
+      }).catch(e => {
+          console.error("Error al verificar publicación guardada:", e);
+          return false; // En caso de error, consideramos que no está guardada
       });
     }
     

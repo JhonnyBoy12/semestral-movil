@@ -12,7 +12,7 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
 })
 export class PublicacionUsuarioPage implements OnInit {
 
-  foto: string = 'assets/icon/perfil.jpg'; // Imagen por defecto
+  foto: string = ''; // Imagen por defecto
   usuario: Usuario = {
     id_usuario: 0,
     nombre_usuario: '',
@@ -24,8 +24,6 @@ export class PublicacionUsuarioPage implements OnInit {
   };
 
   publicaciones: any[] = [];
-  usuarioId: number | null = null;
-  
 
   constructor(private alertController: AlertController,
      private toastController: ToastController, 
@@ -34,8 +32,6 @@ export class PublicacionUsuarioPage implements OnInit {
 
   ngOnInit() {
     
-    this.cargarPublicaciones();
-
     // Suscribirse a los cambios de la sesión del usuario
     this.bd.usuarioSesion$.subscribe(usuario => {
       if (usuario) {
@@ -44,29 +40,37 @@ export class PublicacionUsuarioPage implements OnInit {
       }
     });
 
-    this.cargarDatosUsuario();
+    this.storage.getItem('usuario_sesion')
+      .then(data => {
+        if (data) {
+          // Asignar nombre y foto del usuario
+          this.usuario = data;
+          this.foto = data.foto || 'assets/icon/perfil.jpg'; // Imagen por defecto
+  
+        }
+      })
+      .catch(error => {
+        console.error('Error al recuperar datos de sesión:', error);
+      });
+    
+    // Suscribirse a los cambios de sesión del usuario
+    this.bd.fetchUsuarios().subscribe(usuarios => {
+      if (usuarios.length > 0) {
+        const usuario = usuarios[0]; // Suponiendo que solo hay un usuario activo
+        this.usuario = usuario;
+        this.foto = usuario.foto || 'assets/icon/perfil.jpg'; // Usar la foto del usuario, o la por defecto
+      } else {
+        this.foto = 'assets/icon/perfil.jpg'; // Imagen por defecto
+      }
+    });
+
+    this.cargarPublicaciones();
   }
   
-  async cargarDatosUsuario() {
-    try {
-      const usuario = await this.storage.getItem('usuario_sesion');
-      if (usuario && usuario.id_usuario) {
-        this.usuarioId = usuario.id_usuario;
-        this.usuario = usuario;
-        this.foto = usuario.foto || this.foto; // Usar la foto del usuario si está disponible
-        this.cargarPublicaciones(); // Solo carga publicaciones si se tiene el id
-      } else {
-        console.warn('No se encontró la sesión del usuario.');
-      }
-    } catch (error) {
-      console.error('Error al obtener el usuario de la sesión:', error);
-    }
-  }
-
   async cargarPublicaciones() {
-    if (this.usuarioId) {
+    if (this.usuario.id_usuario) {
       try {
-        this.publicaciones = await this.bd.consultarPublicacionesPorUsuario(this.usuarioId);
+        this.publicaciones = await this.bd.consultarPublicacionesPorUsuario(this.usuario.id_usuario);
       } catch (error) {
         console.error('Error al cargar publicaciones:', error);
         this.mostrarToast('Error al cargar las publicaciones.', 'danger');

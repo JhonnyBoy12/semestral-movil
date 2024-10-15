@@ -54,8 +54,8 @@
   
   <div class="card-publicacion">
     <div class="perfil">
-      <img [src]="usuario?.foto || 'https://ionicframework.com/docs/demos/api/avatar/avatar.svg'" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">{{ usuario?.nombre_usuario || 'Nombre de Usuario' }}</span>
+      <img [src]="imagePerfil" alt="Profile Picture" class="foto-perfil">
+      <span class="nombre">{{ usuario.nombre_usuario}}</span>
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
