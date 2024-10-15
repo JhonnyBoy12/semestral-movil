@@ -15,6 +15,7 @@ export class CambiarContraPage implements OnInit {
   constructor(private bd:ServicebdService, private alertController: AlertController) { }
 
   ngOnInit() {
+    
   }
 
 

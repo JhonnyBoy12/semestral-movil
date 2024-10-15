@@ -326,7 +326,6 @@ export class ServicebdService {
   async iniciarSesion(usuario: any) {
     await this.storage.setItem('usuario_sesion', usuario);
 
-  
     this.listadoUsuarios.next([usuario]); // Actualiza el observable con el nuevo usuario
     this.usuarioSesionSubject.next(usuario); // Asegura que los datos se actualicen en la sesión
   }

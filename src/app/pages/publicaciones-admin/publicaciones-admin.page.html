@@ -17,7 +17,7 @@
   <ng-container *ngFor="let publicacion of publicaciones">
     <div class="card-publicacion">
       <div class="perfil">
-        <img src="publicacion.foto_perfil" alt="Profile Picture" class="foto-perfil">
+        <img [src]="publicacion.foto_perfil ? publicacion.foto_perfil : 'assets/icon/perfil.jpg'" alt="Profile Picture" class="foto-perfil">
         <span class="nombre">{{publicacion.nombre_usuario}}</span>
       </div>
       <ion-card class="card-conten">

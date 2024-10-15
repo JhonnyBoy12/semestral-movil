@@ -14,6 +14,7 @@ import { AlertController } from '@ionic/angular';
 })
 export class PerfilPage implements OnInit {
   imagePerfil: string = ''; // Imagen por defecto
+
   usuario: Usuario = {
     id_usuario: 0,
     nombre_usuario: '',
