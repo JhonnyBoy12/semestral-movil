@@ -22,7 +22,7 @@ export class UsuariosAdminPage implements OnInit {
         this.bd.consultarUsuariosAdmin().then(res=>{
           this.usuarios = res;
         }).catch(error =>{
-          console.error('Error al cargar las Ubicaciones', error)
+          console.error('Error al cargar las Usuarios', error)
         });
       }
     })
@@ -31,17 +31,10 @@ export class UsuariosAdminPage implements OnInit {
 
 
 
-
-
-
-
-
-
-
   async confirmarBorrado() {
     const alert = await this.alertController.create({
       header: 'Confirmar Borrado',
-      message: 'Usted borrará la publicación. ¿Desea borrarla?',
+      message: 'Usted borrará al usuario. ¿Desea borrarla?',
       buttons: [
         {
           text: 'Cancelar',
@@ -52,7 +45,7 @@ export class UsuariosAdminPage implements OnInit {
         }, {
           text: 'Borrar',
           handler: () => {
-            this.mostrarToast('Se ha borrado la ubicación correctamente.', 'success');
+            this.mostrarToast('Se ha borrado al usuario correctamente.', 'success');
             
           }
         }

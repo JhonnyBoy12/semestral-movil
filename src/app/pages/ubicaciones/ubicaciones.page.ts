@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { ServicebdService } from 'src/app/services/servicebd.service';
+
 
 @Component({
   selector: 'app-ubicaciones',
@@ -8,7 +9,7 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
   styleUrls: ['./ubicaciones.page.scss'],
 })
 export class UbicacionesPage implements OnInit {
-  ubicaciones: any | undefined;
+  ubicaciones: any []=[];
  
   constructor(private router: Router, private bd:ServicebdService) { }
   
@@ -28,8 +29,13 @@ export class UbicacionesPage implements OnInit {
     });
   }
 
-  mensajeProvisorio(){
-    this.router.navigate(['/info-ubicaciones']);
+  detalleUbicacion(ubicacion: any){
+    let navigationExtras: NavigationExtras = {
+      state: {
+        detalleUbicacion : ubicacion
+      }
+    }
+    this.router.navigate(['/info-ubicaciones'], navigationExtras);
   }
 
 }

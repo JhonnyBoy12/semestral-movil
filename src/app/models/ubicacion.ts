@@ -9,8 +9,8 @@ export class Ubicacion {
     telefono_lugar!: string;
     id_administrador!: number;
     id_comuna!: number;
-    latitud!: number;
-    longitud!: number;
+    latitud!: string;
+    longitud!: string;
     tipo_marcador!: string;
     visibilidad!: boolean;
     id_establecimiento?: number;
@@ -28,8 +28,8 @@ export class Ubicacion {
       telefono_lugar: string,
       id_administrador: number,
       id_comuna: number,
-      latitud: number,
-      longitud: number,
+      latitud: string,
+      longitud: string,
       tipo_marcador: string,
       visibilidad: boolean,
       id_establecimiento?: number,

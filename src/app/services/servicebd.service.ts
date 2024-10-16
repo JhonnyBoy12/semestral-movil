@@ -35,7 +35,7 @@ export class ServicebdService {
 
   servicio: string = "CREATE TABLE IF NOT EXISTS servicios(id_servicio INTEGER PRIMARY KEY AUTOINCREMENT, nombre_servicio TEXT NOT NULL);";
 
-  ubicacion: string = "CREATE TABLE IF NOT EXISTS ubicaciones(id_ubicacion INTEGER PRIMARY KEY AUTOINCREMENT, nombre_ubicacion TEXT NOT NULL, direccion TEXT NOT NULL, sububicacion TEXT NOT NULL, descripcion_ubicacion TEXT NOT NULL, horario TEXT NOT NULL, imagen_ubicacion TEXT NOT NULL, telefono_lugar TEXT NOT NULL, id_administrador INTEGER NOT NULL, id_comuna INTEGER NOT NULL, latitud REAL NOT NULL, longitud REAL NOT NULL, tipo_marcador TEXT NOT NULL, visibilidad BOOLEAN NOT NULL, id_establecimiento INTEGER, id_especie INTEGER, id_servicio INTEGER, FOREIGN KEY (id_administrador) REFERENCES administrador (id_administrador), FOREIGN KEY (id_comuna) REFERENCES comunas (id_comuna), FOREIGN KEY (id_establecimiento) REFERENCES establecimientos (id_establecimiento), FOREIGN KEY (id_especie) REFERENCES especies (id_especie), FOREIGN KEY (id_servicio) REFERENCES servicios (id_servicio));";
+  ubicacion: string = "CREATE TABLE IF NOT EXISTS ubicaciones(id_ubicacion INTEGER PRIMARY KEY AUTOINCREMENT, nombre_ubicacion TEXT NOT NULL, direccion TEXT NOT NULL, sububicacion TEXT NOT NULL, descripcion_ubicacion TEXT NOT NULL, horario TEXT NOT NULL, imagen_ubicacion TEXT NOT NULL, telefono_lugar TEXT NOT NULL, id_administrador INTEGER NOT NULL, id_comuna INTEGER NOT NULL, latitud TEXT NOT NULL, longitud TEXT NOT NULL, tipo_marcador TEXT NOT NULL, visibilidad BOOLEAN NOT NULL, id_establecimiento INTEGER, id_especie INTEGER, id_servicio INTEGER, FOREIGN KEY (id_administrador) REFERENCES administrador (id_administrador), FOREIGN KEY (id_comuna) REFERENCES comunas (id_comuna), FOREIGN KEY (id_establecimiento) REFERENCES establecimientos (id_establecimiento), FOREIGN KEY (id_especie) REFERENCES especies (id_especie), FOREIGN KEY (id_servicio) REFERENCES servicios (id_servicio));";
 
   publicacion: string = "CREATE TABLE IF NOT EXISTS publicaciones(id_publicacion INTEGER PRIMARY KEY AUTOINCREMENT, id_usuario INTEGER NOT NULL, titulo TEXT NOT NULL, foto TEXT NOT NULL, descripcion TEXT NOT NULL, fecha_publicacion DATE NOT NULL, fecha_baneo DATE, descripcion_baneo TEXT, publicacion_adopcion BOOLEAN, id_categoria INTEGER NOT NULL, FOREIGN KEY (id_usuario) REFERENCES usuarios (id_usuario), FOREIGN KEY (id_categoria) REFERENCES categorias (id_categoria));";
 
@@ -97,9 +97,8 @@ export class ServicebdService {
   servicioDomicilio: string = "INSERT OR IGNORE INTO servicios(nombre_servicio) VALUES ('Servicio a domicilio')";
 
   //// INSERTS TABLA UBICACIONES
-
+  ubicacionVetPlanet: string = "INSERT OR IGNORE INTO ubicaciones(nombre_ubicacion, direccion, sububicacion, descripcion_ubicacion, horario, imagen_ubicacion, telefono_lugar, id_administrador, id_comuna, latitud, longitud, tipo_marcador, visibilidad, id_establecimiento, id_especie, id_servicio) VALUES ('VetPlanet', 'Diego Silva Henriquez 1286', 'Conchalí, Región Metropolitana', 'Contamos con un equipo médico comprometido, cercano y de confianza para cuidar la salud de tu mascota', 'Lunes a Viernes 10a.m -7p.m/ Sábado 10a.m -6p.m / Domingo 12p.m -6p.m', 'imagen prueba', '(2) 2625 2797',1, 1, '-33.384036816873135', '-70.66325872901794', 'prueba marcador', 1, 1, 1, 1)";
   
-
   //SUPER ADMIN
   superAdmin: string = "INSERT OR IGNORE INTO administrador (id_rol, nombre, correo_electronico, contrasena, telefono) VALUES (1, 'SuperAdmin', 'admin@gmail.com', 'Admin.12345', '1234567890')";
   ////////////////////////////
@@ -279,6 +278,12 @@ export class ServicebdService {
       // Insert para el administrador SuperAdmin
       await this.database.executeSql(this.superAdmin, []);
 
+      // INSERT PARA LA TABLA DE UBICACIONES
+      await this.database.executeSql(this.ubicacionVetPlanet, []);
+
+
+
+
     }catch(e){
       this.presentAlert("Creación de Tabla", "Error creando las Tablas: " + JSON.stringify(e));
     }
@@ -406,10 +411,40 @@ export class ServicebdService {
   /////////////////////////////
 
   /////CONSULTA COMPLETA UBICACIONES + INSERCCION ListadoUbicaciones
-  consultarUbicaciones() {
-    const query = `SELECT nombre_ubicacion, direccion, telefono_lugar FROM ubicaciones`;
+  
+  /////////////////////////////
+
+
+
+  ////CONSULTA UBICACIONES
+  consultarUbicaciones(): Promise<any[]> {
+    const query =  `SELECT 
+      u.id_ubicacion,
+      u.nombre_ubicacion,
+      u.direccion,
+      u.sububicacion,
+      u.descripcion_ubicacion,
+      u.horario,
+      u.imagen_ubicacion,
+      u.telefono_lugar,
+      c.nombre_comuna as comuna,
+      e.tipo_establecimiento as establecimiento,
+      es.nombre_especie as especie,
+      s.nombre_servicio as servicio
+    FROM 
+      ubicaciones u
+    JOIN 
+      comunas c ON u.id_comuna = c.id_comuna
+    LEFT JOIN 
+      establecimientos e ON u.id_establecimiento = e.id_establecimiento
+    LEFT JOIN 
+      especies es ON u.id_especie = es.id_especie
+    LEFT JOIN 
+      servicios s ON u.id_servicio = s.id_servicio;
+    `;
+
     return this.database.executeSql(query, []).then(res => {
-      let items: Ubicacion[] = [];
+      let items: any[] = [];
       if (res.rows.length > 0) {
         for (let i = 0; i < res.rows.length; i++) {
           items.push({
@@ -419,24 +454,83 @@ export class ServicebdService {
             sububicacion: res.rows.item(i).sububicacion,
             descripcion_ubicacion: res.rows.item(i).descripcion_ubicacion,
             horario: res.rows.item(i).horario,
-            imagen_ubicacion: res.rows.item(i).imagen_ubicacion,
             telefono_lugar: res.rows.item(i).telefono_lugar,
-            id_administrador: res.rows.item(i).id_administrador,
-            id_comuna: res.rows.item(i).id_comuna,
-            latitud: res.rows.item(i).latitud,
-            longitud: res.rows.item(i).longitud,
-            tipo_marcador: res.rows.item(i).tipo_marcador,
-            visibilidad: res.rows.item(i).visibilidad
+            imagen_ubicacion: res.rows.item(i).imagen_ubicacion,
+            comuna: res.rows.item(i).comuna,
+            establecimiento: res.rows.item(i).establecimiento,
+            especie: res.rows.item(i).especie,
+            servicio: res.rows.item(i).servicio
           });
         }
       }
-      this.listadoUbicaciones.next(items as any);
+      return items;
     }).catch(e => {
-      console.error('Error al consultar ubicaciones', e);
+      this.presentAlert("Consultar UBICACIONES", "Error: " + JSON.stringify(e));
+      throw e;
     });
   }
-  /////////////////////////////
+
+  consultarInfoUbi(id_ubicacion: number): Promise<any[]> {
+    const query =  `SELECT 
+      u.id_ubicacion ,
+      u.nombre_ubicacion,
+      u.direccion,
+      u.sububicacion,
+      u.descripcion_ubicacion,
+      u.horario,
+      u.imagen_ubicacion,
+      u.telefono_lugar,
+      c.nombre_comuna as comuna,
+      u.latitud,
+      u.longitud,
+      e.tipo_establecimiento as establecimiento,
+      es.nombre_especie as especie,
+      s.nombre_servicio as servicio,
+    FROM 
+      ubicaciones u
+    JOIN 
+      comunas c ON u.id_comuna = c.id_comuna
+    LEFT JOIN 
+      establecimientos e ON u.id_establecimiento = e.id_establecimiento
+    LEFT JOIN 
+      especies es ON u.id_especie = es.id_especie
+    LEFT JOIN 
+      servicios s ON u.id_servicio = s.id_servicio
+
+    WHERE u.id_ubicacion = ?;
+    `;
+
+    return this.database.executeSql(query, [id_ubicacion]).then(res => {
+      let items: any[] = [];
+      if (res.rows.length > 0) {
+        for (let i = 0; i < res.rows.length; i++) {
+          items.push({
+            id_ubicacion: res.rows.item(i).id_ubicacion,
+            nombre_ubicacion: res.rows.item(i).nombre_ubicacion,
+            direccion: res.rows.item(i).direccion,
+            sububicacion: res.rows.item(i).sububicacion,
+            descripcion_ubicacion: res.rows.item(i).descripcion_ubicacion,
+            horario: res.rows.item(i).horario,
+            telefono_lugar: res.rows.item(i).telefono_lugar,
+            imagen_ubicacion: res.rows.item(i).imagen_ubicacion,
+            comuna: res.rows.item(i).comuna,
+            latitud: res.rows.item(i).latitud,
+            longitud: res.rows.item(i).longitud,
+            establecimiento: res.rows.item(i).establecimiento,
+            especie: res.rows.item(i).especie,
+            servicio: res.rows.item(i).servicio
+          });
+        }
+      }
+      return items;
+    }).catch(e => {
+      this.presentAlert("Consultar INFO UBICACIONES", "Error: " + JSON.stringify(e));
+      throw e;
+    });
+  }
+
   
+
   //INGRESO DE USUARIO (REGISTRAR USUARIO)
   ingresarUsuario(nombreUsuario: string, email: string, contra: string, id_rol: number, telefono: string) {
     const query = `INSERT INTO usuarios (nombre_usuario, correo_usuario, contrasena_usuario, id_rol, telefono) VALUES (?, ?, ?, ?, ?)`;
@@ -560,28 +654,39 @@ export class ServicebdService {
       });
     }
 
-    consultarUsuariosAdmin(){
-      const query = `SELECT * FROM usuarios`;
-    return this.database.executeSql(query, []).then(res => {
-      let items: Usuario[] = [];
-      if (res.rows.length > 0) {
-        for (let i = 0; i < res.rows.length; i++) {
-          items.push({
-            nombre_usuario: res.rows.item(i).nombre_usuario,
+
+
+
+    consultarUsuariosAdmin(): Promise<any[]> {
+      const query = `
+        SELECT * FROM usuarios
+      `;
+      
+      return this.database.executeSql(query, []).then(res => {
+        let items: any[] = [];
+        if (res.rows.length > 0) {
+          for (let i = 0; i < res.rows.length; i++) {
+            items.push({
+              nombre_usuario: res.rows.item(i).nombre_usuario,
             correo_usuario: res.rows.item(i).corre_usuario,
             telefono: res.rows.item(i).telefono,
             foto: res.rows.item(i).foto,
             id_usuario: 0,
             contrasena_usuario: '',
             id_rol: 0
-          });
+            });
+          }
         }
-      }
-      this.listadoUsuariosAdmin.next(items as any);
-    }).catch(e => {
-      console.error('Error al consultar usuarios', e);
-    });
+        return items;
+      }).catch(e => {
+        this.presentAlert("Consultar Usuarios", "Error: " + JSON.stringify(e));
+        throw e;
+      });
     }
+    
+    
+
+
 
     async obtenerUsuarioSesion(): Promise<any> {
       try {

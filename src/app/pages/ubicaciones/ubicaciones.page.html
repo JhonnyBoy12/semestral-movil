@@ -20,16 +20,17 @@
 
     <ng-container *ngFor="let ubicacion of ubicaciones">
       <div class="lista-ubicaciones">
-        <ion-item (click)="mensajeProvisorio()">
+        <ion-item (click)="detalleUbicacion(ubicacion)">
           <ion-avatar slot="start">
             <img src="assets/icon/location.png"/>
           </ion-avatar>
-
-          <ion-label>
-            <h2>{{ubicacion.nombre_ubicacion}}</h2>
-            <p>{{ubicacion.direccion}}</p>
-            <p>{{ubicacion.telefono_lugar}}</p>
-          </ion-label>
+          <ion-header>
+            {{ubicacion.nombre_ubicacion}}
+          </ion-header>
+          <ion-card-content>
+            {{ubicacion.direccion}}
+            {{ubicacion.telefono_lugar}}
+          </ion-card-content>
         </ion-item>
       </div>
     </ng-container>

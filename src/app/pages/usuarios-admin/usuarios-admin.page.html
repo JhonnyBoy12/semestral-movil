@@ -1,12 +1,12 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-    <ion-back-button></ion-back-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <div class="superior">
-      <ion-title>Administrar Usuarios</ion-title>
+      <ion-title>Foro de adopciones</ion-title>
       <div class="logo">
-          <img src="assets/icon/logo-admin.png"/>
+          <img src="assets/icon/logo.png"/>
       </div>
     </div>
     </ion-toolbar>
@@ -18,6 +18,7 @@
       <ion-card-title>Lista de usuarios</ion-card-title>
       <ion-card-subtitle>Administrar</ion-card-subtitle>
     </ion-card-header>
+
     <ng-container *ngFor="let usuario of usuarios">
       <div class="card-usuarios">
         <div class="perfil">

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PopoverController } from '@ionic/angular';
 import { ComponentemenuComponent } from 'src/app/components/componentemenu/componentemenu.component';
+import { ServicebdService } from 'src/app/services/servicebd.service';
 
 @Component({
   selector: 'app-info-ubicaciones',
@@ -10,14 +11,28 @@ import { ComponentemenuComponent } from 'src/app/components/componentemenu/compo
 })
 export class InfoUbicacionesPage implements OnInit {
 
-  constructor(private router: Router, public popoverController: PopoverController ) { }
+  detalleUbi: any;
+
+
+  constructor(private router: Router, public popoverController: PopoverController, private bd:ServicebdService, private activedRoute: ActivatedRoute) { 
+    this.activedRoute.queryParams.subscribe(res=>{
+      if(this.router.getCurrentNavigation()?.extras.state){
+        this.detalleUbi = this.router.getCurrentNavigation()?.extras?.state?.['detalleUbicacion'];
+      }
+    })
+  }
 
   ngOnInit() {
+
+    
   }
 
-  mensajeProvisorio(){
-    this.router.navigate(['/info-ubicaciones']);
-  }
+
+  
+
+
+
+  
 
   async contactar(ev: any) {
     const popover = await this.popoverController.create({

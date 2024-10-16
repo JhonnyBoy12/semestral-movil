@@ -10,29 +10,30 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" color="secondary">
+
   <div class="informacion">
-    <ion-icon name="paw" ></ion-icon><h1 class="titulo">Huella Animal</h1>
-    <p class="direccion">Dirección: Diego Almagro #346 <ion-icon name="pin"></ion-icon></p>
-    <p class="horario">Horarios: Lunes a Viernes 9:00 AM - 6:00 PM</p>
-    <p class="descripcion">Centro de rescate encargados de recuperar a distintos animales</p>
+    <ion-icon name="paw" ></ion-icon><h1 class="titulo">{{detalleUbi.nombre_ubicacion}}</h1>
+    <p class="direccion">{{detalleUbi.direccion}} <ion-icon name="pin"></ion-icon></p>
+    <p class="horario">Horarios: {{detalleUbi.horario}}</p>
+    <p class="descripcion">{{detalleUbi.sububicacion}}</p>
   </div>
 
   <div class="info-container">
     
       <div class="especialidades">
-        <ion-chip color="primary">Perros y Gatos</ion-chip>
-        <ion-chip color="primary">Rescates</ion-chip>
-        <ion-chip color="primary">Otros Animales</ion-chip>
+        <ion-chip color="primary">{{detalleUbi.especie}}</ion-chip>
+        <ion-chip color="primary">{{detalleUbi.servicio}}</ion-chip>
+        <ion-chip color="primary">{{detalleUbi.establecimiento}}</ion-chip>
       
     </div>
     <div class="info-extra">
       <ion-card>
         <ion-card-header>
-          <ion-card-subtitle>Rescates</ion-card-subtitle>
+          <ion-card-subtitle>{{detalleUbi.establecimiento}}</ion-card-subtitle>
           <ion-card-title>Información Adicional</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-          Más detalles sobre las operaciones, horas de atención, condiciones especiales, reglas, lo que se hace y tambien xosas especficas del sitio etc.
+          {{detalleUbi.descripcion}}
         </ion-card-content>
         <ion-button expand="block" routerLink="/home" class="color">
           <ion-icon slot="start" name="navigate-outline"></ion-icon>
