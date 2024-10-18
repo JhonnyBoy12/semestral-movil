@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Usuario } from 'src/app/models/usuario';
@@ -28,7 +28,8 @@ export class PublicacionUsuarioPage implements OnInit {
   constructor(private alertController: AlertController,
      private toastController: ToastController, 
      private bd: ServicebdService,
-     private storage: NativeStorage ) { }
+     private storage: NativeStorage,
+    private router: Router ) { }
 
   ngOnInit() {
     
@@ -66,6 +67,16 @@ export class PublicacionUsuarioPage implements OnInit {
 
     this.cargarPublicaciones();
   }
+
+  async mostrarToast(mensaje: string, color: string) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+      color: color,
+      position: 'bottom'
+    });
+    toast.present();
+  }
   
   async cargarPublicaciones() {
     if (this.usuario.id_usuario) {
@@ -78,38 +89,57 @@ export class PublicacionUsuarioPage implements OnInit {
     }
   }
 
-  async confirmarBorrado() {
+  async mostrarAlerta(id_publicacion: number){
     const alert = await this.alertController.create({
       header: 'Confirmar Borrado',
       message: 'Usted borrará la publicación. ¿Desea borrarla?',
+      cssClass: 'custom-alert', // Agregar clase personalizada
       buttons: [
         {
           text: 'Cancelar',
           role: 'cancel',
+          cssClass: 'cancel-button', // Clase personalizada
           handler: () => {
-            this.mostrarToast('No se ha realizado ningún cambio.', 'danger');
+            this.mostrarToast('No se ha realizado ningún cambio.', 'default');
           }
         }, {
           text: 'Borrar',
-          handler: () => {
-            this.mostrarToast('Se ha borrado la publicación correctamente.', 'success');
-            
+          cssClass: 'confirm-button', // Clase personalizada
+          handler: async () => {
+            this.borrarPublicacion(id_publicacion);
+            const publicacionesGuardadas = await this.bd.consultarPublicacionesGuardadas(this.usuario.id_usuario);
+            this.bd.listadoPublicacionesGuardadas.next(publicacionesGuardadas);
           }
         }
       ]
     });
-
+    
     await alert.present();
+
   }
 
-  async mostrarToast(mensaje: string, color: string) {
-    const toast = await this.toastController.create({
-      message: mensaje,
-      duration: 2000,
-      color: color,
-      position: 'bottom'
+  async borrarPublicacion(id_publicacion: number) {
+    this.bd.borrarPublicacion(id_publicacion).then(() => {
+      this.mostrarToast('Se ha borrado correctamene la publicacion.', 'danger');
+      this.cargarPublicaciones(); 
+      
+    }).catch(error => {
+      this.mostrarToast('Error al borrar la publicación.', 'danger');
+      console.error('Error al borrar la publicación', error);
     });
-    toast.present();
+  }
+  
+  async confirmarBorrado(id_publicacion: number) {
+    this.mostrarAlerta(id_publicacion);
+  }
+
+  editarPublicacion(publicacion: any){
+    let navigationExtras: NavigationExtras ={
+      state: {
+        edicion: publicacion,
+      }
+    }
+    this.router.navigate(['/editar-publicacion'], navigationExtras)
   }
 
 }

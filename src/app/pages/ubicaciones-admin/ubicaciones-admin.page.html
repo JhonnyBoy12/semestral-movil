@@ -20,21 +20,24 @@
     
   </ion-button>
 
-  <ng-container *ngFor="let ubicacion of ubicaciones">
-      <div class="lista-ubicaciones">
-        
-          <ion-avatar slot="start">
-            <img src="assets/icon/location.png"/>
-          </ion-avatar>
-          <ion-label>
-            <h2>{{ubicacion.nombre_ubicacion}}</h2>
-            <p>{{ubicacion.direccion}}</p>
-            <p>{{ubicacion.telefono_lugar}}</p>
-          </ion-label>
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
+  <div class="lista-ubicaciones" >
+    <ng-container *ngFor="let ubicacion of ubicaciones">
 
-      </div>
-  </ng-container>
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="assets/icon/location.png"/>
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ubicacion.nombre_ubicacion}}</h2>
+          <p>{{ubicacion.direccion}}</p>
+          <p>(9) {{ubicacion.telefono_lugar}}</p>
+          <ion-note color="warning">{{ubicacion.servicio}}</ion-note>
+        </ion-label>
+        <ion-button (click)="confirmarBorrado(ubicacion.id_ubicacion)" fill="clear" color="dark">
+          <ion-icon name="trash"></ion-icon>
+        </ion-button>
+      </ion-item>   
+
+    </ng-container>
+  </div>
 </ion-content>

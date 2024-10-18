@@ -11,26 +11,27 @@
     
 }
 .circular-image {
-    width: 50px;
-    height: 50px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
   }
   
 
-  ion-input {
-    display: block;
+  h2 {
+    display: flex;
     margin-bottom: 10px;
+    margin-left: 5px;
   }
 
 
   .item-container {
-    margin: 30px 0; 
+    margin: 30px 5px 10px 5px; 
     padding: 10px;  
     border-radius: 8px; 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
     background: #b9e7db; 
-    margin-bottom: 60px;
+    margin-bottom: 10px;
   }
   
   .circular-image {
@@ -42,10 +43,7 @@
   ion-label {
     display: flex;
     flex-direction: column;
-    gap: 15px; 
   }
   
-  ion-input {
-    width: 100%; 
-  }
+ 
   

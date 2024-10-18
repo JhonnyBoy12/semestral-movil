@@ -37,6 +37,7 @@
         </ion-button>
       </ion-col>
     </ion-row>
+
     <ion-list>
       <ng-container *ngFor="let publicacion of publicacionesGuardadas">
           <div class="card-publicacion">
@@ -54,16 +55,18 @@
               <ion-card-content>
                {{ publicacion.descripcion}}
               </ion-card-content>
+
+              <ion-chip style="margin-left: 10px;">{{publicacion.categoria}}</ion-chip>
         
               <ion-row class="boton-accion">
                 <ion-col>
-                  <ion-button (click)="quitarGuardado()" fill="clear" color="dark">
+                  <ion-button (click)="quitarGuardado(publicacion.id_publicacion)" fill="clear" color="dark">
                     <ion-icon name="bookmark-outline"></ion-icon>
                     Quitar
                   </ion-button>
                 </ion-col>
                 <ion-col>
-                  <ion-button (click)="contactar($event)" fill="clear" color="dark">
+                  <ion-button (click)="contactar($event, publicacion.telefono)" fill="clear" color="dark">
                     <ion-icon name="call-outline"></ion-icon>
                     Contactar
                   </ion-button>

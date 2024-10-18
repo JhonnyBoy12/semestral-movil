@@ -10,6 +10,12 @@
   box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
+ion-button{
+  padding: 0px 30px 20px 30px;
+  --background: #aaeee0;  
+  --color: rgb(73, 69, 69);   
+   
+}
 
 .publicacion{
     background-color: #55c3a7;
@@ -20,6 +26,11 @@
         padding:5px 0 15px 0;
     }
     
+}
+
+ion-chip {
+  --background: #a2e6cc;
+  --color: #175237;
 }
 
 .vista-previa {

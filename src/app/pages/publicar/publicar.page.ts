@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
 import { AlertController, ToastController } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ServicebdService } from 'src/app/services/servicebd.service';
-import { firstValueFrom } from 'rxjs';
 import { Usuario } from 'src/app/models/usuario';
 
 @Component({
@@ -25,7 +24,7 @@ export class PublicarPage implements OnInit {
   categorias = [
     { id: 1, nombre: 'Perros' },
     { id: 2, nombre: 'Gatos' },
-    { id: 3, nombre: 'Perros y Gatos' },
+    { id: 3, nombre: 'Perros y Gatos' }, 
     { id: 4, nombre: 'Roedores' },
     { id: 5, nombre: 'Otros' }
   ];
@@ -48,7 +47,8 @@ export class PublicarPage implements OnInit {
     private alertController: AlertController,
     private toastController: ToastController,
     private bd: ServicebdService,
-    private storage: NativeStorage
+    private storage: NativeStorage,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -58,6 +58,7 @@ export class PublicarPage implements OnInit {
       if (usuario) {
         this.usuario = usuario;
         this.imagePerfil = usuario.foto || 'assets/icon/perfil.jpg'; // Actualiza la imagen
+        this.cdr.detectChanges();
       }
     });
     
@@ -91,14 +92,19 @@ export class PublicarPage implements OnInit {
     });
   }
 
+  onCategoriaChange(event: any) {
+    this.id_categoria = event; // Actualizamos el valor de id_categoria
+    this.cdr.detectChanges(); // Forzamos la detección de cambios para que la vista previa se actualice
+  }
   
 
   // Método para obtener el nombre de la categoría
   getNombreCategoria(id: number | null): string {
     if (id === null) {
-      return 'Categoría no seleccionada'; // Maneja el caso de null aquí
+      return 'Categoría no seleccionada';
     }
     const categoria = this.categorias.find(cat => cat.id === id);
+    console.log('ID Categoría seleccionada:', id); // Debugging
     return categoria ? categoria.nombre : 'Categoría no seleccionada';
   }
 
@@ -121,6 +127,7 @@ export class PublicarPage implements OnInit {
     });
     await toast.present();
   }
+
 
   // Método para capturar una imagen
   async takePicture() {

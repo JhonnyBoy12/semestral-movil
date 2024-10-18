@@ -86,9 +86,10 @@ export class PublicacionGuardadaPage implements OnInit {
     await toast.present();
   }
 
-  async contactar(ev: any) {
+  async contactar(ev: any, telefono:string) {
     const popover = await this.popoverController.create({
       component: ComponentemenuComponent,
+      componentProps: { telefono },
       event: ev,
       translucent: true,
       backdropDismiss: true // Permite cerrar tocando fuera del Popover
@@ -96,9 +97,16 @@ export class PublicacionGuardadaPage implements OnInit {
     await popover.present();
   }
 
-
-  quitarGuardado(){
-    this.presentToast("Se ah quitado de guardado la publicacion",'bottom');
+  async quitarGuardado(id_publicacion: number) {
+    try {
+      await this.bd.borrarPublicacionGuardada(this.usuario.id_usuario, id_publicacion);
+      // Actualiza la lista de publicaciones guardadas
+      await this.cargarPublicacionesGuardadas(); // Recarga las publicaciones guardadas
+      this.presentToast("Se ha quitado de guardado la publicación", 'bottom');
+    } catch (error) {
+      console.error('Error al quitar la publicación guardada:', error);
+      this.presentToast("Error al quitar la publicación guardada", 'bottom');
+    }
   }
-
+  
 }

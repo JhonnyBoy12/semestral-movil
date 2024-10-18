@@ -80,11 +80,13 @@ const routes: Routes = [
     loadChildren: () => import('./pages/cambiar-contra/cambiar-contra.module').then( m => m.CambiarContraPageModule)
   },
   {
+    path: 'editar-publicacion',
+    loadChildren: () => import('./pages/editar-publicacion/editar-publicacion.module').then( m => m.EditarPublicacionPageModule)
+  },
+  {
     path: '**',
     loadChildren: () => import('./pages/notfound/notfound.module').then( m => m.NotfoundPageModule)
-  },
-
-
+  }
 ];
 
 @NgModule({

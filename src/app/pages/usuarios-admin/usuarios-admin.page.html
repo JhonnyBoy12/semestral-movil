@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <div class="superior">
       <ion-title>Foro de adopciones</ion-title>
@@ -18,27 +18,29 @@
       <ion-card-title>Lista de usuarios</ion-card-title>
       <ion-card-subtitle>Administrar</ion-card-subtitle>
     </ion-card-header>
-
-    <ng-container *ngFor="let usuario of usuarios">
-      <div class="card-usuarios">
-        <div class="perfil">
-          <img [src]="usuario.foto" alt="Profile Picture" class="foto-perfil">
-          <span class="nombre">{{ usuario.nombre_usuario }}</span>
+    
+    <ion-card-content>
+      <ion-list *ngFor="let usuario of usuarios">
+        <!-- Contenedor para el primer ítem -->
+        <div class="item-container">
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img alt="Profile Picture" [src]="usuario.foto ? usuario.foto : 'assets/icon/perfil.jpg'" class="circular-image"/>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ usuario.nombre_usuario }}</h2>
+              <h2>{{ usuario.correo_usuario }}</h2>
+              <h2>9 {{ usuario.telefono }}</h2>
+            </ion-label>
+            <ion-button (click)="confirmarBorrado(usuario.id_usuario)" fill="clear" color="dark">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-item>
         </div>
-        <ion-card class="card-conten">
-          <ion-card-header>
-            <ion-card-title>{{ usuario.correo_usuario }}</ion-card-title>
-          </ion-card-header>
+      </ion-list>
+    </ion-card-content>
 
-         <ion-card-content>
-            {{ usuario.telefono }}
-          </ion-card-content>
-
-          <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </ion-card>
-      </div>
-    </ng-container>
   </ion-card>
+      
 </ion-content>
+

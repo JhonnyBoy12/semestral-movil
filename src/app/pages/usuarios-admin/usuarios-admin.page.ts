@@ -8,6 +8,7 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
   styleUrls: ['./usuarios-admin.page.scss'],
 })
 export class UsuariosAdminPage implements OnInit {
+
   usuarios: any;
 
   constructor(private alertController: AlertController, private toastController: ToastController, private bd:ServicebdService) { }
@@ -29,31 +30,48 @@ export class UsuariosAdminPage implements OnInit {
 
   }
 
-
-
-  async confirmarBorrado() {
+  async mostrarAlerta(id_usuario: number){
     const alert = await this.alertController.create({
       header: 'Confirmar Borrado',
-      message: 'Usted borrará al usuario. ¿Desea borrarla?',
+      message: 'Usted borrará el usuario. ¿Desea borrar el usuario?',
+      cssClass: 'custom-alert', // Agregar clase personalizada
       buttons: [
         {
           text: 'Cancelar',
           role: 'cancel',
+          cssClass: 'cancel-button', // Clase personalizada
           handler: () => {
-            this.mostrarToast('No se ha realizado ningún cambio.', 'danger');
+            this.mostrarToast('No se ha realizado ningún cambio.', 'default');
           }
         }, {
           text: 'Borrar',
+          cssClass: 'confirm-button', // Clase personalizada
           handler: () => {
-            this.mostrarToast('Se ha borrado al usuario correctamente.', 'success');
-            
+            this.borrarUsuario(id_usuario);
           }
         }
       ]
     });
-
+    
     await alert.present();
+
   }
+
+  async borrarUsuario(id_usuario: number) {
+    this.bd.borrarUsuario(id_usuario).then(() => {
+      this.mostrarToast('Se ha borrado correctamene la publicacion.', 'danger');
+      this.consultarUsuariosAdmin(); 
+      
+    }).catch(error => {
+      this.mostrarToast('Error al borrar la publicación.', 'danger');
+      console.error('Error al borrar la publicación', error);
+    });
+  }
+
+  async confirmarBorrado(id_usuario: number) {
+    this.mostrarAlerta(id_usuario)
+  }
+
   async mostrarToast(mensaje: string, color: string) {
     const toast = await this.toastController.create({
       message: mensaje,

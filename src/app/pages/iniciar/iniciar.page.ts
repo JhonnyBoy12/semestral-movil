@@ -39,9 +39,9 @@ export class IniciarPage implements OnInit {
   }
 
   // ALERTA TOAST
-  async presentToast(position: 'top' | 'middle' | 'bottom', usuario: string = "") {
+  async presentToast(position: 'top' | 'middle' | 'bottom', usuario: string = "", nombreUsuario:string) {
     const toast = await this.toastController.create({
-      message: "Ha iniciado como " + usuario + " correctamente, ¡Hola!",
+      message: "Ha iniciado como " + usuario + " correctamente, ¡Hola! "+ nombreUsuario,
       duration: 1500,
       position: position,
     });
@@ -77,7 +77,7 @@ export class IniciarPage implements OnInit {
   
         // Redirige a la página del administrador
         this.router.navigate(['/home-admin']);
-        this.presentToast('bottom', "administrador");
+        this.presentToast('bottom', "administrador",admin.nombre);
     } else {
         // Si no es administrador, intenta validar como usuario
         const usuario = await this.bd.validarUsuario(this.email, this.contra);
@@ -99,7 +99,7 @@ export class IniciarPage implements OnInit {
   
                 // Redirige a la página del usuario
                 this.router.navigate(['/home']);
-                this.presentToast('bottom', "usuario");
+                this.presentToast('bottom', "usuario",datosCompletos.nombre_usuario);
             }
         } else {
             this.presentAlert('Correo electrónico o contraseña inválida.');

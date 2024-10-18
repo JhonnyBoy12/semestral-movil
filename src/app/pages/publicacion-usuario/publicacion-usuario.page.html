@@ -21,7 +21,7 @@
   </div>
   
   <!-- Lista de Publicaciones -->
-  <div class="publicacion-eleccion"> 
+  <div class="publicacion-eleccion" color="primary"> 
     <ion-row>
       <ion-col>
         <ion-button fill="clear" color="dark" class="boton-activo">
@@ -56,16 +56,18 @@
                 <ion-card-content>
                   {{ publicacion.descripcion }}
                 </ion-card-content>
+
+                <ion-chip style="margin-left: 10px;" >{{publicacion.categoria}}</ion-chip>
           
                 <ion-row class="boton-accion">
                   <ion-col>
-                    <ion-button fill="clear" color="dark">
+                    <ion-button fill="clear" color="dark" (click)="editarPublicacion(publicacion)">
                       <ion-icon name="create"></ion-icon>
                       Editar
                     </ion-button>
                   </ion-col>
                   <ion-col>
-                    <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
+                    <ion-button (click)="confirmarBorrado(publicacion.id_publicacion)" fill="clear" color="dark">
                       <ion-icon name="trash"></ion-icon>
                       Borrar
                     </ion-button>

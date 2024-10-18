@@ -71,12 +71,17 @@ export class RegistrarPage implements OnInit {
       return;
     }
 
-    //Validacion nombre de largo 6
-    if (this.nombreUsuario.length <= 6) {
-      this.presentAlert('El nombre de usuario debe tener más de 6 caracteres.');
+    // Validación de longitud del nombre de usuario
+    if (this.nombreUsuario.length < 6) {
+      this.presentAlert('El nombre de usuario debe tener al menos 6 caracteres.');
       return;
     }
 
+    if (this.nombreUsuario.length > 14) {
+      this.presentAlert('El nombre de usuario no debe exceder los 14 caracteres.');
+      return;
+    }
+    
     // Validación de correo
     if (!this.email) {
       this.presentAlert('Por favor ingrese un correo electrónico.');

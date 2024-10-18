@@ -24,17 +24,19 @@
         <ion-card-header>
           <div class="header-content">
             <ion-card-title>{{publicacion.titulo}}</ion-card-title>
-            <ion-button (click)="confirmarBorrado()" fill="clear" color="dark">
+            <ion-button (click)="confirmarBorrado(publicacion.id_publicacion)" fill="clear" color="dark">
               <ion-icon name="trash"></ion-icon>
             </ion-button>
           </div>
         </ion-card-header>
         
-        <img [src]="publicacion.foto_perfil"alt="Imagen de la Publicación" class="imagen"/>
+        <img [src]="publicacion.foto" alt="Imagen de la Publicación" class="imagen"/>
 
         <ion-card-content>
           {{publicacion.descripcion}}
         </ion-card-content>
+
+        <ion-chip style="margin-left: 10px;">{{publicacion.categoria}}</ion-chip>
 
         <ion-row class="boton-accion">
           <ion-col>

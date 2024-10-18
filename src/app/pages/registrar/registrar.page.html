@@ -17,14 +17,14 @@
         <form>
 
           <ion-item color="light">
-            <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese un nombre de usuario"
+            <ion-input label="Nombre Usuario" labelPlacement="floating" placeholder="Ingrese un nombre de usuario" maxlength="14"
             [(ngModel)]="nombreUsuario"
             name="nombreUsuario"></ion-input>
           </ion-item>
           <ion-item color="null" lines="none">
             <ion-text color="medium">
               <small>
-                Su nombre de usuario debe tener como minimo 6 caracteres.
+                Su nombre de usuario debe tener como minimo 6 y maximo 14 caracteres.
               </small>
             </ion-text>
           </ion-item>

@@ -9,8 +9,9 @@ import { ServicebdService } from 'src/app/services/servicebd.service';
   styleUrls: ['./ubicaciones.page.scss'],
 })
 export class UbicacionesPage implements OnInit {
+
   ubicaciones: any []=[];
- 
+  
   constructor(private router: Router, private bd:ServicebdService) { }
   
   ngOnInit() {
@@ -28,6 +29,8 @@ export class UbicacionesPage implements OnInit {
       }
     });
   }
+
+
 
   detalleUbicacion(ubicacion: any){
     let navigationExtras: NavigationExtras = {

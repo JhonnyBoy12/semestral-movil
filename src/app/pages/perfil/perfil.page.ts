@@ -4,7 +4,6 @@ import { Usuario } from 'src/app/models/usuario';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { ServicebdService } from 'src/app/services/servicebd.service';
 import { NativeStorage } from '@awesome-cordova-plugins/native-storage/ngx';
-import { firstValueFrom } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 
 @Component({

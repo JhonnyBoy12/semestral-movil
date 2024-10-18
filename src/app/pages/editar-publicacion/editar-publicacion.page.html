@@ -1,10 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <div class="superior">
-      <ion-title>Publicar en adopcion</ion-title>
+      <ion-title>Editar Publicacion</ion-title>
       <div class="logo">
           <img src="assets/icon/logo.png"/>
       </div>
@@ -18,23 +18,23 @@
   <div class="publicacion">
     <ion-item>
       <ion-input label="Titulo de publicacion" labelPlacement="floating" placeholder="Ingrese titulo de publicacion"
-      [(ngModel)]="titulo"></ion-input>
+      [(ngModel)]="publicacionEdit.titulo"></ion-input>
     </ion-item>
 
     
-      <ion-button (click)="takePicture()">Agregar imagen</ion-button>
+      <ion-button (click)="takePicture()">Cambiar imagen</ion-button>
     
 
     <ion-item>
       <ion-textarea label="Descripción" labelPlacement="floating" placeholder="Máximo 100 caracteres" maxlength="100" 
-      [(ngModel)]="descripcion"></ion-textarea>
-      <ion-note slot="end">{{descripcion.length}}/100</ion-note>
+      [(ngModel)]="publicacionEdit.descripcion"></ion-textarea>
+      <ion-note slot="end">{{publicacionEdit.descripcion.length}}/100</ion-note>
     </ion-item>
 
     <!-- ion-select para la categoría -->
     <ion-item>
       <ion-label>Categoría</ion-label>
-      <ion-select [(ngModel)]="id_categoria" (ngModelChange)="onCategoriaChange($event)" placeholder="Seleccione una categoría">
+      <ion-select [(ngModel)]="publicacionEdit.id_categoria" (ngModelChange)="onCategoriaChange($event)" placeholder="Seleccione una categoría">
         <ion-select-option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -50,21 +50,21 @@
   
   <div class="card-publicacion">
     <div class="perfil">
-      <img [src]="imagePerfil" alt="Profile Picture" class="foto-perfil">
-      <span class="nombre">{{ usuario.nombre_usuario}}</span>
+      <img [src]="publicacionEdit.foto_perfil ? publicacionEdit.foto_perfil : 'assets/icon/perfil.jpg'" alt="Profile Picture" class="foto-perfil">
+      <span class="nombre">{{ publicacionEdit.nombre_usuario }}</span>
     </div>
     <ion-card class="card-conten">
       <ion-card-header>
-        <ion-card-title>{{ titulo || 'Título de la publicación' }}</ion-card-title>
+        <ion-card-title>{{ publicacionEdit.titulo || 'Título de la publicación' }}</ion-card-title>
       </ion-card-header>
 
-      <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa de la imagen" class="imagen"/>
+      <img *ngIf="publicacionEdit.foto" [src]="publicacionEdit.foto" alt="Vista previa de la imagen" class="imagen"/>
 
       <ion-card-content>
-        {{ descripcion || 'Descripción de la publicación...' }}
+        {{ publicacionEdit.descripcion || 'Descripción de la publicación...' }}
       </ion-card-content>
 
-      <ion-chip style="margin-left: 10px;">{{ id_categoria ? getNombreCategoria(id_categoria) : 'Categoría no seleccionada' }}</ion-chip>
+      <ion-chip style="margin-left: 10px;">{{ publicacionEdit.id_categoria ? getNombreCategoria(publicacionEdit.id_categoria) : 'Categoría no seleccionada' }}</ion-chip>
 
       <ion-row class="boton-accion">
         <ion-col>
@@ -83,7 +83,6 @@
     </ion-card>
   </div>
   
-  <ion-button expand="full" color="primary" (click)="publicar()" class="boton-publicar" 
-  style="padding: 0px 40px 20px 40px; font-weight: bold;">Publicar</ion-button>
+  <ion-button expand="full" color="primary" (click)="editar()" class="boton-publicar" 
+  style="padding: 0px 40px 20px 40px; font-weight: bold;">Editar</ion-button>
 </ion-content>
-  

@@ -67,9 +67,10 @@ export class ForoPage implements OnInit {
     });
   }
 
-  async contactar(ev: any) {
+  async contactar(ev: any, telefono:string) {
     const popover = await this.popoverController.create({
       component: ComponentemenuComponent,
+      componentProps: { telefono },
       event: ev,
       translucent: true,
       backdropDismiss: true // Permite cerrar tocando fuera del Popover
@@ -95,21 +96,38 @@ export class ForoPage implements OnInit {
     }
   
     try {
-      // Validar si la publicación ya está guardada
-      const Guardada = await this.bd.validarPublicacionGuardada(this.id_usuario, id_publicacion);
+      // Proceder a guardar la publicación sin validar si ya está guardada
+      await this.bd.guardarPublicacion(this.id_usuario, id_publicacion);
   
-      if (Guardada) {
-        // Si la publicación ya está guardada, mostrar mensaje
-        this.presentToast('bottom', 'Esta publicación ya está guardada entra a guardados para eliminar.');
-      } else {
-        // Si la publicación no está guardada, proceder a guardarla
-        await this.bd.guardarPublicacion(this.id_usuario, id_publicacion);
-        this.presentToast('bottom', 'Publicación guardada correctamente.');
-      }
+      // Actualizar las publicaciones guardadas
+      await this.actualizarPublicacionesGuardadas();
+  
+      // Mostrar mensaje de éxito
+      this.presentToast('bottom', 'Publicación guardada correctamente. Ve a tus guardados si quieres quitarlo.');
     } catch (error) {
       console.error("Error al guardar la publicación:", error);
       this.presentToast('bottom', 'Error al guardar la publicación.');
     }
   }
+  
+
+  async actualizarPublicacionesGuardadas() {
+    try {
+      // Verifica si el id_usuario está definido
+      if (!this.id_usuario) {
+        this.presentToast('bottom', 'Error al guardar la publicación id usuario.');
+        return;
+      }
+  
+      // Consultar las publicaciones guardadas para actualizarlas
+      const publicacionesGuardadas = await this.bd.consultarPublicacionesGuardadas(this.id_usuario!);
+  
+      // Emitir el nuevo estado de publicaciones guardadas
+      this.bd.listadoPublicacionesGuardadas.next(publicacionesGuardadas);
+    } catch (error) {
+      console.error("Error al actualizar las publicaciones guardadas:", error);
+    }
+  }
+  
 }
 

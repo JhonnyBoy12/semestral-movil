@@ -23,16 +23,7 @@ export class InfoUbicacionesPage implements OnInit {
   }
 
   ngOnInit() {
-
-    
   }
-
-
-  
-
-
-
-  
 
   async contactar(ev: any) {
     const popover = await this.popoverController.create({
